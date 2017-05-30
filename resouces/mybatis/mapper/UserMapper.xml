@@ -37,11 +37,11 @@
         ,user.image as User6
     </sql>
 
-    <select id="getUserRowCount" parameterType="com.common.Assist" resultType="java.lang.Long">
+    <select id="getUserRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
         select count(id) from user
         <if test="require!=null"><include refid="Assist" /></if>
     </select>
-    <select id="selectUser" parameterType="com.common.Assist"  resultMap="result_User_Map">
+    <select id="selectUser" parameterType="com.sysu.common.Assist"  resultMap="result_User_Map">
         select  <if test="distinct !=null">${distinct}</if>
         <choose>
             <when test="resultColumn!=null">${resultColumn}</when>
@@ -95,7 +95,7 @@
         where id = #{id}
     </delete>
 
-    <delete id="deleteUser" parameterType="com.common.Assist">
+    <delete id="deleteUser" parameterType="com.sysu.common.Assist">
         delete from user
         <if test="require!=null"><include refid="Assist" /></if>
     </delete>

@@ -1,7 +1,7 @@
 package com.sysu.mapper;
-import com.sysu.common.Assist;
 import com.sysu.pojo.User;
 import java.util.List;
+import com.sysu.common.Assist;
 import org.apache.ibatis.annotations.Param;
 public interface UserDao{
     long getUserRowCount(Assist assist);

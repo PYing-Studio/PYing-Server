@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sysu.mapper.MoviesDao">
+    <resultMap id="result_Movies_Map" type="com.sysu.pojo.Movies">
+        <id column="Movies0" property="id" />
+        <result column="Movies1" property="is3d" />
+        <result column="Movies2" property="cat" />
+        <result column="Movies3" property="cnms" />
+        <result column="Movies4" property="director" />
+        <result column="Movies5" property="dur" />
+        <result column="Movies6" property="imax" />
+        <result column="Movies7" property="img" />
+        <result column="Movies8" property="late" />
+        <result column="Movies9" property="name" />
+        <result column="Movies10" property="pn" />
+        <result column="Movies11" property="presale" />
+        <result column="Movies12" property="rt" />
+        <result column="Movies13" property="sc" />
+        <result column="Movies14" property="scm" />
+        <result column="Movies15" property="showdata" />
+        <result column="Movies16" property="showinfo" />
+        <result column="Movies17" property="sn" />
+        <result column="Movies18" property="snum" />
+        <result column="Movies19" property="src" />
+        <result column="Movies20" property="star" />
+        <result column="Movies21" property="time" />
+        <result column="Movies22" property="vd" />
+        <result column="Movies23" property="ver" />
+        <result column="Movies24" property="wish" />
+        <result column="Movies25" property="dra" />
+        <result column="Movies26" property="maoyanjson" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="movies_Column">
+        movies.id as Movies0
+        ,movies.is_3d as Movies1
+        ,movies.cat as Movies2
+        ,movies.cnms as Movies3
+        ,movies.director as Movies4
+        ,movies.dur as Movies5
+        ,movies.imax as Movies6
+        ,movies.img as Movies7
+        ,movies.late as Movies8
+        ,movies.name as Movies9
+        ,movies.pn as Movies10
+        ,movies.preSale as Movies11
+        ,movies.rt as Movies12
+        ,movies.sc as Movies13
+        ,movies.scm as Movies14
+        ,movies.showData as Movies15
+        ,movies.showinfo as Movies16
+        ,movies.sn as Movies17
+        ,movies.snum as Movies18
+        ,movies.src as Movies19
+        ,movies.star as Movies20
+        ,movies.time as Movies21
+        ,movies.vd as Movies22
+        ,movies.ver as Movies23
+        ,movies.wish as Movies24
+        ,movies.dra as Movies25
+        ,movies.maoyanjson as Movies26
+    </sql>
+
+    <select id="getMoviesRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
+        select count(id) from movies
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectMovies" parameterType="com.sysu.common.Assist"  resultMap="result_Movies_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="movies_Column" /> 
+            </otherwise>
+        </choose>
+        from movies
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectMoviesById" parameterType="java.lang.Integer" resultMap="result_Movies_Map">
+        select 
+            <include refid="movies_Column" /> 
+        from movies
+        where movies.id = #{id}
+    </select> 
+
+
+    <insert id="insertMovies" parameterType="com.sysu.pojo.Movies">
+        insert into movies(id,is_3d,cat,cnms,director,dur,imax,img,late,name,pn,preSale,rt,sc,scm,showData,showinfo,sn,snum,src,star,time,vd,ver,wish,dra,maoyanjson) 
+        values(#{id},#{is3d},#{cat},#{cnms},#{director},#{dur},#{imax},#{img},#{late},#{name},#{pn},#{presale},#{rt},#{sc},#{scm},#{showdata},#{showinfo},#{sn},#{snum},#{src},#{star},#{time},#{vd},#{ver},#{wish},#{dra},#{maoyanjson})
+    </insert>
+
+    <insert id="insertNonEmptyMovies" parameterType="com.sysu.pojo.Movies">
+        insert into movies
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="is3d != null">is_3d,</if>
+            <if test="cat != null">cat,</if>
+            <if test="cnms != null">cnms,</if>
+            <if test="director != null">director,</if>
+            <if test="dur != null">dur,</if>
+            <if test="imax != null">imax,</if>
+            <if test="img != null">img,</if>
+            <if test="late != null">late,</if>
+            <if test="name != null">name,</if>
+            <if test="pn != null">pn,</if>
+            <if test="presale != null">preSale,</if>
+            <if test="rt != null">rt,</if>
+            <if test="sc != null">sc,</if>
+            <if test="scm != null">scm,</if>
+            <if test="showdata != null">showData,</if>
+            <if test="showinfo != null">showinfo,</if>
+            <if test="sn != null">sn,</if>
+            <if test="snum != null">snum,</if>
+            <if test="src != null">src,</if>
+            <if test="star != null">star,</if>
+            <if test="time != null">time,</if>
+            <if test="vd != null">vd,</if>
+            <if test="ver != null">ver,</if>
+            <if test="wish != null">wish,</if>
+            <if test="dra != null">dra,</if>
+            <if test="maoyanjson != null">maoyanjson,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="is3d != null"> #{is3d},</if>
+            <if test="cat != null"> #{cat},</if>
+            <if test="cnms != null"> #{cnms},</if>
+            <if test="director != null"> #{director},</if>
+            <if test="dur != null"> #{dur},</if>
+            <if test="imax != null"> #{imax},</if>
+            <if test="img != null"> #{img},</if>
+            <if test="late != null"> #{late},</if>
+            <if test="name != null"> #{name},</if>
+            <if test="pn != null"> #{pn},</if>
+            <if test="presale != null"> #{presale},</if>
+            <if test="rt != null"> #{rt},</if>
+            <if test="sc != null"> #{sc},</if>
+            <if test="scm != null"> #{scm},</if>
+            <if test="showdata != null"> #{showdata},</if>
+            <if test="showinfo != null"> #{showinfo},</if>
+            <if test="sn != null"> #{sn},</if>
+            <if test="snum != null"> #{snum},</if>
+            <if test="src != null"> #{src},</if>
+            <if test="star != null"> #{star},</if>
+            <if test="time != null"> #{time},</if>
+            <if test="vd != null"> #{vd},</if>
+            <if test="ver != null"> #{ver},</if>
+            <if test="wish != null"> #{wish},</if>
+            <if test="dra != null"> #{dra},</if>
+            <if test="maoyanjson != null"> #{maoyanjson},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteMoviesById" parameterType="java.lang.Integer">
+        delete from movies
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteMovies" parameterType="com.sysu.common.Assist">
+        delete from movies
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateMoviesById" parameterType="com.sysu.pojo.Movies">
+        update movies set
+            is_3d=#{is3d}
+            ,cat=#{cat}
+            ,cnms=#{cnms}
+            ,director=#{director}
+            ,dur=#{dur}
+            ,imax=#{imax}
+            ,img=#{img}
+            ,late=#{late}
+            ,name=#{name}
+            ,pn=#{pn}
+            ,preSale=#{presale}
+            ,rt=#{rt}
+            ,sc=#{sc}
+            ,scm=#{scm}
+            ,showData=#{showdata}
+            ,showinfo=#{showinfo}
+            ,sn=#{sn}
+            ,snum=#{snum}
+            ,src=#{src}
+            ,star=#{star}
+            ,time=#{time}
+            ,vd=#{vd}
+            ,ver=#{ver}
+            ,wish=#{wish}
+            ,dra=#{dra}
+            ,maoyanjson=#{maoyanjson}
+        where id=#{id}
+    </update>
+
+    <update id="updateNonEmptyMoviesById" parameterType="com.sysu.pojo.Movies">
+        update movies
+        <set>
+            <if test="is3d != null">
+                is_3d=#{is3d},
+            </if>
+            <if test="cat != null">
+                cat=#{cat},
+            </if>
+            <if test="cnms != null">
+                cnms=#{cnms},
+            </if>
+            <if test="director != null">
+                director=#{director},
+            </if>
+            <if test="dur != null">
+                dur=#{dur},
+            </if>
+            <if test="imax != null">
+                imax=#{imax},
+            </if>
+            <if test="img != null">
+                img=#{img},
+            </if>
+            <if test="late != null">
+                late=#{late},
+            </if>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="pn != null">
+                pn=#{pn},
+            </if>
+            <if test="presale != null">
+                preSale=#{presale},
+            </if>
+            <if test="rt != null">
+                rt=#{rt},
+            </if>
+            <if test="sc != null">
+                sc=#{sc},
+            </if>
+            <if test="scm != null">
+                scm=#{scm},
+            </if>
+            <if test="showdata != null">
+                showData=#{showdata},
+            </if>
+            <if test="showinfo != null">
+                showinfo=#{showinfo},
+            </if>
+            <if test="sn != null">
+                sn=#{sn},
+            </if>
+            <if test="snum != null">
+                snum=#{snum},
+            </if>
+            <if test="src != null">
+                src=#{src},
+            </if>
+            <if test="star != null">
+                star=#{star},
+            </if>
+            <if test="time != null">
+                time=#{time},
+            </if>
+            <if test="vd != null">
+                vd=#{vd},
+            </if>
+            <if test="ver != null">
+                ver=#{ver},
+            </if>
+            <if test="wish != null">
+                wish=#{wish},
+            </if>
+            <if test="dra != null">
+                dra=#{dra},
+            </if>
+            <if test="maoyanjson != null">
+                maoyanjson=#{maoyanjson},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateMovies" parameterType="map">
+        update movies
+        <set>
+                id=#{enti.id},
+                is_3d=#{enti.is3d},
+                cat=#{enti.cat},
+                cnms=#{enti.cnms},
+                director=#{enti.director},
+                dur=#{enti.dur},
+                imax=#{enti.imax},
+                img=#{enti.img},
+                late=#{enti.late},
+                name=#{enti.name},
+                pn=#{enti.pn},
+                preSale=#{enti.presale},
+                rt=#{enti.rt},
+                sc=#{enti.sc},
+                scm=#{enti.scm},
+                showData=#{enti.showdata},
+                showinfo=#{enti.showinfo},
+                sn=#{enti.sn},
+                snum=#{enti.snum},
+                src=#{enti.src},
+                star=#{enti.star},
+                time=#{enti.time},
+                vd=#{enti.vd},
+                ver=#{enti.ver},
+                wish=#{enti.wish},
+                dra=#{enti.dra},
+                maoyanjson=#{enti.maoyanjson},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyMovies" parameterType="map">
+        update movies
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.is3d != null">
+                is_3d=#{enti.is3d},
+            </if>
+            <if test="enti.cat != null">
+                cat=#{enti.cat},
+            </if>
+            <if test="enti.cnms != null">
+                cnms=#{enti.cnms},
+            </if>
+            <if test="enti.director != null">
+                director=#{enti.director},
+            </if>
+            <if test="enti.dur != null">
+                dur=#{enti.dur},
+            </if>
+            <if test="enti.imax != null">
+                imax=#{enti.imax},
+            </if>
+            <if test="enti.img != null">
+                img=#{enti.img},
+            </if>
+            <if test="enti.late != null">
+                late=#{enti.late},
+            </if>
+            <if test="enti.name != null">
+                name=#{enti.name},
+            </if>
+            <if test="enti.pn != null">
+                pn=#{enti.pn},
+            </if>
+            <if test="enti.presale != null">
+                preSale=#{enti.presale},
+            </if>
+            <if test="enti.rt != null">
+                rt=#{enti.rt},
+            </if>
+            <if test="enti.sc != null">
+                sc=#{enti.sc},
+            </if>
+            <if test="enti.scm != null">
+                scm=#{enti.scm},
+            </if>
+            <if test="enti.showdata != null">
+                showData=#{enti.showdata},
+            </if>
+            <if test="enti.showinfo != null">
+                showinfo=#{enti.showinfo},
+            </if>
+            <if test="enti.sn != null">
+                sn=#{enti.sn},
+            </if>
+            <if test="enti.snum != null">
+                snum=#{enti.snum},
+            </if>
+            <if test="enti.src != null">
+                src=#{enti.src},
+            </if>
+            <if test="enti.star != null">
+                star=#{enti.star},
+            </if>
+            <if test="enti.time != null">
+                time=#{enti.time},
+            </if>
+            <if test="enti.vd != null">
+                vd=#{enti.vd},
+            </if>
+            <if test="enti.ver != null">
+                ver=#{enti.ver},
+            </if>
+            <if test="enti.wish != null">
+                wish=#{enti.wish},
+            </if>
+            <if test="enti.dra != null">
+                dra=#{enti.dra},
+            </if>
+            <if test="enti.maoyanjson != null">
+                maoyanjson=#{enti.maoyanjson},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

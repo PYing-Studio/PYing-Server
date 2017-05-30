@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sysu.mapper.YueyinDao">
+    <resultMap id="result_Yueyin_Map" type="com.sysu.pojo.Yueyin">
+        <id column="Yueyin0" property="id" />
+        <result column="Yueyin1" property="username" />
+        <result column="Yueyin2" property="movieId" />
+        <result column="Yueyin3" property="moveName" />
+        <result column="Yueyin4" property="cinemaId" />
+        <result column="Yueyin5" property="cinemaName" />
+        <result column="Yueyin6" property="time" />
+        <result column="Yueyin7" property="num" />
+        <result column="Yueyin8" property="friends" />
+        <result column="Yueyin9" property="statue" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="yueyin_Column">
+        yueyin.id as Yueyin0
+        ,yueyin.username as Yueyin1
+        ,yueyin.movie_id as Yueyin2
+        ,yueyin.move_name as Yueyin3
+        ,yueyin.cinema_id as Yueyin4
+        ,yueyin.cinema_name as Yueyin5
+        ,yueyin.time as Yueyin6
+        ,yueyin.num as Yueyin7
+        ,yueyin.friends as Yueyin8
+        ,yueyin.statue as Yueyin9
+    </sql>
+
+    <select id="getYueyinRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
+        select count(id) from yueyin
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectYueyin" parameterType="com.sysu.common.Assist"  resultMap="result_Yueyin_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="yueyin_Column" /> 
+            </otherwise>
+        </choose>
+        from yueyin
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectYueyinById" parameterType="java.lang.Integer" resultMap="result_Yueyin_Map">
+        select 
+            <include refid="yueyin_Column" /> 
+        from yueyin
+        where yueyin.id = #{id}
+    </select> 
+
+
+    <insert id="insertYueyin" parameterType="com.sysu.pojo.Yueyin">
+        insert into yueyin(id,username,movie_id,move_name,cinema_id,cinema_name,time,num,friends,statue) 
+        values(#{id},#{username},#{movieId},#{moveName},#{cinemaId},#{cinemaName},#{time},#{num},#{friends},#{statue})
+    </insert>
+
+    <insert id="insertNonEmptyYueyin" parameterType="com.sysu.pojo.Yueyin">
+        insert into yueyin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="username != null">username,</if>
+            <if test="movieId != null">movie_id,</if>
+            <if test="moveName != null">move_name,</if>
+            <if test="cinemaId != null">cinema_id,</if>
+            <if test="cinemaName != null">cinema_name,</if>
+            <if test="time != null">time,</if>
+            <if test="num != null">num,</if>
+            <if test="friends != null">friends,</if>
+            <if test="statue != null">statue,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="username != null"> #{username},</if>
+            <if test="movieId != null"> #{movieId},</if>
+            <if test="moveName != null"> #{moveName},</if>
+            <if test="cinemaId != null"> #{cinemaId},</if>
+            <if test="cinemaName != null"> #{cinemaName},</if>
+            <if test="time != null"> #{time},</if>
+            <if test="num != null"> #{num},</if>
+            <if test="friends != null"> #{friends},</if>
+            <if test="statue != null"> #{statue},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteYueyinById" parameterType="java.lang.Integer">
+        delete from yueyin
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteYueyin" parameterType="com.sysu.common.Assist">
+        delete from yueyin
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateYueyinById" parameterType="com.sysu.pojo.Yueyin">
+        update yueyin set
+            username=#{username}
+            ,movie_id=#{movieId}
+            ,move_name=#{moveName}
+            ,cinema_id=#{cinemaId}
+            ,cinema_name=#{cinemaName}
+            ,time=#{time}
+            ,num=#{num}
+            ,friends=#{friends}
+            ,statue=#{statue}
+        where id=#{id}
+    </update>
+
+    <update id="updateNonEmptyYueyinById" parameterType="com.sysu.pojo.Yueyin">
+        update yueyin
+        <set>
+            <if test="username != null">
+                username=#{username},
+            </if>
+            <if test="movieId != null">
+                movie_id=#{movieId},
+            </if>
+            <if test="moveName != null">
+                move_name=#{moveName},
+            </if>
+            <if test="cinemaId != null">
+                cinema_id=#{cinemaId},
+            </if>
+            <if test="cinemaName != null">
+                cinema_name=#{cinemaName},
+            </if>
+            <if test="time != null">
+                time=#{time},
+            </if>
+            <if test="num != null">
+                num=#{num},
+            </if>
+            <if test="friends != null">
+                friends=#{friends},
+            </if>
+            <if test="statue != null">
+                statue=#{statue},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateYueyin" parameterType="map">
+        update yueyin
+        <set>
+                id=#{enti.id},
+                username=#{enti.username},
+                movie_id=#{enti.movieId},
+                move_name=#{enti.moveName},
+                cinema_id=#{enti.cinemaId},
+                cinema_name=#{enti.cinemaName},
+                time=#{enti.time},
+                num=#{enti.num},
+                friends=#{enti.friends},
+                statue=#{enti.statue},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyYueyin" parameterType="map">
+        update yueyin
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.username != null">
+                username=#{enti.username},
+            </if>
+            <if test="enti.movieId != null">
+                movie_id=#{enti.movieId},
+            </if>
+            <if test="enti.moveName != null">
+                move_name=#{enti.moveName},
+            </if>
+            <if test="enti.cinemaId != null">
+                cinema_id=#{enti.cinemaId},
+            </if>
+            <if test="enti.cinemaName != null">
+                cinema_name=#{enti.cinemaName},
+            </if>
+            <if test="enti.time != null">
+                time=#{enti.time},
+            </if>
+            <if test="enti.num != null">
+                num=#{enti.num},
+            </if>
+            <if test="enti.friends != null">
+                friends=#{enti.friends},
+            </if>
+            <if test="enti.statue != null">
+                statue=#{enti.statue},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

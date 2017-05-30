@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sysu.mapper.CinemaDao">
+    <resultMap id="result_Cinema_Map" type="com.sysu.pojo.Cinema">
+        <id column="Cinema0" property="id" />
+        <result column="Cinema1" property="cityId" />
+        <result column="Cinema2" property="cityName" />
+        <result column="Cinema3" property="addr" />
+        <result column="Cinema4" property="name" />
+        <result column="Cinema5" property="lat" />
+        <result column="Cinema6" property="lng" />
+        <result column="Cinema7" property="maoyanjson" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="cinema_Column">
+        cinema.id as Cinema0
+        ,cinema.city_id as Cinema1
+        ,cinema.city_name as Cinema2
+        ,cinema.addr as Cinema3
+        ,cinema.name as Cinema4
+        ,cinema.lat as Cinema5
+        ,cinema.lng as Cinema6
+        ,cinema.maoyanjson as Cinema7
+    </sql>
+
+    <select id="getCinemaRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
+        select count(id) from cinema
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectCinema" parameterType="com.sysu.common.Assist"  resultMap="result_Cinema_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="cinema_Column" /> 
+            </otherwise>
+        </choose>
+        from cinema
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectCinemaById" parameterType="java.lang.Integer" resultMap="result_Cinema_Map">
+        select 
+            <include refid="cinema_Column" /> 
+        from cinema
+        where cinema.id = #{id}
+    </select> 
+
+
+    <insert id="insertCinema" parameterType="com.sysu.pojo.Cinema">
+        insert into cinema(id,city_id,city_name,addr,name,lat,lng,maoyanjson) 
+        values(#{id},#{cityId},#{cityName},#{addr},#{name},#{lat},#{lng},#{maoyanjson})
+    </insert>
+
+    <insert id="insertNonEmptyCinema" parameterType="com.sysu.pojo.Cinema">
+        insert into cinema
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="cityId != null">city_id,</if>
+            <if test="cityName != null">city_name,</if>
+            <if test="addr != null">addr,</if>
+            <if test="name != null">name,</if>
+            <if test="lat != null">lat,</if>
+            <if test="lng != null">lng,</if>
+            <if test="maoyanjson != null">maoyanjson,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="cityId != null"> #{cityId},</if>
+            <if test="cityName != null"> #{cityName},</if>
+            <if test="addr != null"> #{addr},</if>
+            <if test="name != null"> #{name},</if>
+            <if test="lat != null"> #{lat},</if>
+            <if test="lng != null"> #{lng},</if>
+            <if test="maoyanjson != null"> #{maoyanjson},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteCinemaById" parameterType="java.lang.Integer">
+        delete from cinema
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteCinema" parameterType="com.sysu.common.Assist">
+        delete from cinema
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateCinemaById" parameterType="com.sysu.pojo.Cinema">
+        update cinema set
+            city_id=#{cityId}
+            ,city_name=#{cityName}
+            ,addr=#{addr}
+            ,name=#{name}
+            ,lat=#{lat}
+            ,lng=#{lng}
+            ,maoyanjson=#{maoyanjson}
+        where id=#{id}
+    </update>
+
+    <update id="updateNonEmptyCinemaById" parameterType="com.sysu.pojo.Cinema">
+        update cinema
+        <set>
+            <if test="cityId != null">
+                city_id=#{cityId},
+            </if>
+            <if test="cityName != null">
+                city_name=#{cityName},
+            </if>
+            <if test="addr != null">
+                addr=#{addr},
+            </if>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="lat != null">
+                lat=#{lat},
+            </if>
+            <if test="lng != null">
+                lng=#{lng},
+            </if>
+            <if test="maoyanjson != null">
+                maoyanjson=#{maoyanjson},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateCinema" parameterType="map">
+        update cinema
+        <set>
+                id=#{enti.id},
+                city_id=#{enti.cityId},
+                city_name=#{enti.cityName},
+                addr=#{enti.addr},
+                name=#{enti.name},
+                lat=#{enti.lat},
+                lng=#{enti.lng},
+                maoyanjson=#{enti.maoyanjson},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyCinema" parameterType="map">
+        update cinema
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.cityId != null">
+                city_id=#{enti.cityId},
+            </if>
+            <if test="enti.cityName != null">
+                city_name=#{enti.cityName},
+            </if>
+            <if test="enti.addr != null">
+                addr=#{enti.addr},
+            </if>
+            <if test="enti.name != null">
+                name=#{enti.name},
+            </if>
+            <if test="enti.lat != null">
+                lat=#{enti.lat},
+            </if>
+            <if test="enti.lng != null">
+                lng=#{enti.lng},
+            </if>
+            <if test="enti.maoyanjson != null">
+                maoyanjson=#{enti.maoyanjson},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

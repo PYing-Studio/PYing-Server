@@ -1,12 +1,35 @@
 package com.sysu.serviceImpl;
 import java.util.List;
 
-import com.sysu.common.Assist;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.sysu.mapper.UserDao;
 import com.sysu.pojo.User;
+import com.sysu.pojo.UserExample;
+import com.sysu.common.Assist;
 import com.sysu.service.UserService;
+import com.sysu.utils.Md5Encrypt;
+
 public class UserServiceImpl implements UserService{
     private UserDao userDao;
+    
+	@Autowired 
+	private com.sysu.mapper.UserMapper userMapper;
+    
+	@Override
+	public User login(String userName, String password) {
+		// TODO Auto-generated method stub
+		UserExample example = new UserExample();
+		example.createCriteria().andUserNameEqualTo(userName).andPasswdEqualTo(Md5Encrypt.md5(password));
+		List<User> userList = userMapper.selectByExample(example);
+		if(CollectionUtils.isEmpty(userList)){
+			return null;
+		}
+		
+		return userList.get(0);
+	}
+    
     @Override
     public long getUserRowCount(Assist assist){
         return userDao.getUserRowCount(assist);

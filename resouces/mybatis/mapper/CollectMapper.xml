@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sysu.mapper.CollectDao">
+    <resultMap id="result_Collect_Map" type="com.sysu.pojo.Collect">
+        <id column="Collect0" property="id" />
+        <result column="Collect1" property="username" />
+        <result column="Collect2" property="movieId" />
+        <result column="Collect3" property="movieName" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="collect_Column">
+        collect.id as Collect0
+        ,collect.username as Collect1
+        ,collect.movie_id as Collect2
+        ,collect.movie_name as Collect3
+    </sql>
+
+    <select id="getCollectRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
+        select count(id) from collect
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectCollect" parameterType="com.sysu.common.Assist"  resultMap="result_Collect_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="collect_Column" /> 
+            </otherwise>
+        </choose>
+        from collect
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectCollectById" parameterType="java.lang.Integer" resultMap="result_Collect_Map">
+        select 
+            <include refid="collect_Column" /> 
+        from collect
+        where collect.id = #{id}
+    </select> 
+
+
+    <insert id="insertCollect" parameterType="com.sysu.pojo.Collect">
+        insert into collect(id,username,movie_id,movie_name) 
+        values(#{id},#{username},#{movieId},#{movieName})
+    </insert>
+
+    <insert id="insertNonEmptyCollect" parameterType="com.sysu.pojo.Collect">
+        insert into collect
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="username != null">username,</if>
+            <if test="movieId != null">movie_id,</if>
+            <if test="movieName != null">movie_name,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="username != null"> #{username},</if>
+            <if test="movieId != null"> #{movieId},</if>
+            <if test="movieName != null"> #{movieName},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteCollectById" parameterType="java.lang.Integer">
+        delete from collect
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteCollect" parameterType="com.sysu.common.Assist">
+        delete from collect
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateCollectById" parameterType="com.sysu.pojo.Collect">
+        update collect set
+            username=#{username}
+            ,movie_id=#{movieId}
+            ,movie_name=#{movieName}
+        where id=#{id}
+    </update>
+
+    <update id="updateNonEmptyCollectById" parameterType="com.sysu.pojo.Collect">
+        update collect
+        <set>
+            <if test="username != null">
+                username=#{username},
+            </if>
+            <if test="movieId != null">
+                movie_id=#{movieId},
+            </if>
+            <if test="movieName != null">
+                movie_name=#{movieName},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateCollect" parameterType="map">
+        update collect
+        <set>
+                id=#{enti.id},
+                username=#{enti.username},
+                movie_id=#{enti.movieId},
+                movie_name=#{enti.movieName},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyCollect" parameterType="map">
+        update collect
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.username != null">
+                username=#{enti.username},
+            </if>
+            <if test="enti.movieId != null">
+                movie_id=#{enti.movieId},
+            </if>
+            <if test="enti.movieName != null">
+                movie_name=#{enti.movieName},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

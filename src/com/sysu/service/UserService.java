@@ -1,8 +1,7 @@
 package com.sysu.service;
 import java.util.List;
-
-import com.sysu.common.Assist;
 import com.sysu.pojo.User;
+import com.sysu.common.Assist;
 public interface UserService{
     long getUserRowCount(Assist assist);
     List<User> selectUser(Assist assist);
@@ -15,4 +14,6 @@ public interface UserService{
     int updateUser(User value, Assist assist);
     int updateNonEmptyUserById(User enti);
     int updateNonEmptyUser(User value, Assist assist);
+    
+	public User login(String userName, String password);
 }

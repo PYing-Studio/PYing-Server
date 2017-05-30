@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sysu.mapper.HotMovieDao">
+    <resultMap id="result_HotMovie_Map" type="com.sysu.pojo.HotMovie">
+        <id column="HotMovie0" property="id" />
+        <result column="HotMovie1" property="is3d" />
+        <result column="HotMovie2" property="cat" />
+        <result column="HotMovie3" property="cnms" />
+        <result column="HotMovie4" property="director" />
+        <result column="HotMovie5" property="dur" />
+        <result column="HotMovie6" property="imax" />
+        <result column="HotMovie7" property="img" />
+        <result column="HotMovie8" property="late" />
+        <result column="HotMovie9" property="name" />
+        <result column="HotMovie10" property="pn" />
+        <result column="HotMovie11" property="presale" />
+        <result column="HotMovie12" property="rt" />
+        <result column="HotMovie13" property="sc" />
+        <result column="HotMovie14" property="scm" />
+        <result column="HotMovie15" property="showdata" />
+        <result column="HotMovie16" property="showinfo" />
+        <result column="HotMovie17" property="sn" />
+        <result column="HotMovie18" property="snum" />
+        <result column="HotMovie19" property="src" />
+        <result column="HotMovie20" property="star" />
+        <result column="HotMovie21" property="time" />
+        <result column="HotMovie22" property="vd" />
+        <result column="HotMovie23" property="ver" />
+        <result column="HotMovie24" property="wish" />
+        <result column="HotMovie25" property="maoyanjson" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="hot_movie_Column">
+        hot_movie.id as HotMovie0
+        ,hot_movie.is_3d as HotMovie1
+        ,hot_movie.cat as HotMovie2
+        ,hot_movie.cnms as HotMovie3
+        ,hot_movie.director as HotMovie4
+        ,hot_movie.dur as HotMovie5
+        ,hot_movie.imax as HotMovie6
+        ,hot_movie.img as HotMovie7
+        ,hot_movie.late as HotMovie8
+        ,hot_movie.name as HotMovie9
+        ,hot_movie.pn as HotMovie10
+        ,hot_movie.preSale as HotMovie11
+        ,hot_movie.rt as HotMovie12
+        ,hot_movie.sc as HotMovie13
+        ,hot_movie.scm as HotMovie14
+        ,hot_movie.showData as HotMovie15
+        ,hot_movie.showinfo as HotMovie16
+        ,hot_movie.sn as HotMovie17
+        ,hot_movie.snum as HotMovie18
+        ,hot_movie.src as HotMovie19
+        ,hot_movie.star as HotMovie20
+        ,hot_movie.time as HotMovie21
+        ,hot_movie.vd as HotMovie22
+        ,hot_movie.ver as HotMovie23
+        ,hot_movie.wish as HotMovie24
+        ,hot_movie.maoyanjson as HotMovie25
+    </sql>
+
+    <select id="getHotMovieRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
+        select count(id) from hot_movie
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectHotMovie" parameterType="com.sysu.common.Assist"  resultMap="result_HotMovie_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="hot_movie_Column" /> 
+            </otherwise>
+        </choose>
+        from hot_movie
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectHotMovieById" parameterType="java.lang.Integer" resultMap="result_HotMovie_Map">
+        select 
+            <include refid="hot_movie_Column" /> 
+        from hot_movie
+        where hot_movie.id = #{id}
+    </select> 
+
+
+    <insert id="insertHotMovie" parameterType="com.sysu.pojo.HotMovie">
+        insert into hot_movie(id,is_3d,cat,cnms,director,dur,imax,img,late,name,pn,preSale,rt,sc,scm,showData,showinfo,sn,snum,src,star,time,vd,ver,wish,maoyanjson) 
+        values(#{id},#{is3d},#{cat},#{cnms},#{director},#{dur},#{imax},#{img},#{late},#{name},#{pn},#{presale},#{rt},#{sc},#{scm},#{showdata},#{showinfo},#{sn},#{snum},#{src},#{star},#{time},#{vd},#{ver},#{wish},#{maoyanjson})
+    </insert>
+
+    <insert id="insertNonEmptyHotMovie" parameterType="com.sysu.pojo.HotMovie">
+        insert into hot_movie
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="is3d != null">is_3d,</if>
+            <if test="cat != null">cat,</if>
+            <if test="cnms != null">cnms,</if>
+            <if test="director != null">director,</if>
+            <if test="dur != null">dur,</if>
+            <if test="imax != null">imax,</if>
+            <if test="img != null">img,</if>
+            <if test="late != null">late,</if>
+            <if test="name != null">name,</if>
+            <if test="pn != null">pn,</if>
+            <if test="presale != null">preSale,</if>
+            <if test="rt != null">rt,</if>
+            <if test="sc != null">sc,</if>
+            <if test="scm != null">scm,</if>
+            <if test="showdata != null">showData,</if>
+            <if test="showinfo != null">showinfo,</if>
+            <if test="sn != null">sn,</if>
+            <if test="snum != null">snum,</if>
+            <if test="src != null">src,</if>
+            <if test="star != null">star,</if>
+            <if test="time != null">time,</if>
+            <if test="vd != null">vd,</if>
+            <if test="ver != null">ver,</if>
+            <if test="wish != null">wish,</if>
+            <if test="maoyanjson != null">maoyanjson,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="is3d != null"> #{is3d},</if>
+            <if test="cat != null"> #{cat},</if>
+            <if test="cnms != null"> #{cnms},</if>
+            <if test="director != null"> #{director},</if>
+            <if test="dur != null"> #{dur},</if>
+            <if test="imax != null"> #{imax},</if>
+            <if test="img != null"> #{img},</if>
+            <if test="late != null"> #{late},</if>
+            <if test="name != null"> #{name},</if>
+            <if test="pn != null"> #{pn},</if>
+            <if test="presale != null"> #{presale},</if>
+            <if test="rt != null"> #{rt},</if>
+            <if test="sc != null"> #{sc},</if>
+            <if test="scm != null"> #{scm},</if>
+            <if test="showdata != null"> #{showdata},</if>
+            <if test="showinfo != null"> #{showinfo},</if>
+            <if test="sn != null"> #{sn},</if>
+            <if test="snum != null"> #{snum},</if>
+            <if test="src != null"> #{src},</if>
+            <if test="star != null"> #{star},</if>
+            <if test="time != null"> #{time},</if>
+            <if test="vd != null"> #{vd},</if>
+            <if test="ver != null"> #{ver},</if>
+            <if test="wish != null"> #{wish},</if>
+            <if test="maoyanjson != null"> #{maoyanjson},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteHotMovieById" parameterType="java.lang.Integer">
+        delete from hot_movie
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteHotMovie" parameterType="com.sysu.common.Assist">
+        delete from hot_movie
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateHotMovieById" parameterType="com.sysu.pojo.HotMovie">
+        update hot_movie set
+            is_3d=#{is3d}
+            ,cat=#{cat}
+            ,cnms=#{cnms}
+            ,director=#{director}
+            ,dur=#{dur}
+            ,imax=#{imax}
+            ,img=#{img}
+            ,late=#{late}
+            ,name=#{name}
+            ,pn=#{pn}
+            ,preSale=#{presale}
+            ,rt=#{rt}
+            ,sc=#{sc}
+            ,scm=#{scm}
+            ,showData=#{showdata}
+            ,showinfo=#{showinfo}
+            ,sn=#{sn}
+            ,snum=#{snum}
+            ,src=#{src}
+            ,star=#{star}
+            ,time=#{time}
+            ,vd=#{vd}
+            ,ver=#{ver}
+            ,wish=#{wish}
+            ,maoyanjson=#{maoyanjson}
+        where id=#{id}
+    </update>
+
+    <update id="updateNonEmptyHotMovieById" parameterType="com.sysu.pojo.HotMovie">
+        update hot_movie
+        <set>
+            <if test="is3d != null">
+                is_3d=#{is3d},
+            </if>
+            <if test="cat != null">
+                cat=#{cat},
+            </if>
+            <if test="cnms != null">
+                cnms=#{cnms},
+            </if>
+            <if test="director != null">
+                director=#{director},
+            </if>
+            <if test="dur != null">
+                dur=#{dur},
+            </if>
+            <if test="imax != null">
+                imax=#{imax},
+            </if>
+            <if test="img != null">
+                img=#{img},
+            </if>
+            <if test="late != null">
+                late=#{late},
+            </if>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="pn != null">
+                pn=#{pn},
+            </if>
+            <if test="presale != null">
+                preSale=#{presale},
+            </if>
+            <if test="rt != null">
+                rt=#{rt},
+            </if>
+            <if test="sc != null">
+                sc=#{sc},
+            </if>
+            <if test="scm != null">
+                scm=#{scm},
+            </if>
+            <if test="showdata != null">
+                showData=#{showdata},
+            </if>
+            <if test="showinfo != null">
+                showinfo=#{showinfo},
+            </if>
+            <if test="sn != null">
+                sn=#{sn},
+            </if>
+            <if test="snum != null">
+                snum=#{snum},
+            </if>
+            <if test="src != null">
+                src=#{src},
+            </if>
+            <if test="star != null">
+                star=#{star},
+            </if>
+            <if test="time != null">
+                time=#{time},
+            </if>
+            <if test="vd != null">
+                vd=#{vd},
+            </if>
+            <if test="ver != null">
+                ver=#{ver},
+            </if>
+            <if test="wish != null">
+                wish=#{wish},
+            </if>
+            <if test="maoyanjson != null">
+                maoyanjson=#{maoyanjson},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateHotMovie" parameterType="map">
+        update hot_movie
+        <set>
+                id=#{enti.id},
+                is_3d=#{enti.is3d},
+                cat=#{enti.cat},
+                cnms=#{enti.cnms},
+                director=#{enti.director},
+                dur=#{enti.dur},
+                imax=#{enti.imax},
+                img=#{enti.img},
+                late=#{enti.late},
+                name=#{enti.name},
+                pn=#{enti.pn},
+                preSale=#{enti.presale},
+                rt=#{enti.rt},
+                sc=#{enti.sc},
+                scm=#{enti.scm},
+                showData=#{enti.showdata},
+                showinfo=#{enti.showinfo},
+                sn=#{enti.sn},
+                snum=#{enti.snum},
+                src=#{enti.src},
+                star=#{enti.star},
+                time=#{enti.time},
+                vd=#{enti.vd},
+                ver=#{enti.ver},
+                wish=#{enti.wish},
+                maoyanjson=#{enti.maoyanjson},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyHotMovie" parameterType="map">
+        update hot_movie
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.is3d != null">
+                is_3d=#{enti.is3d},
+            </if>
+            <if test="enti.cat != null">
+                cat=#{enti.cat},
+            </if>
+            <if test="enti.cnms != null">
+                cnms=#{enti.cnms},
+            </if>
+            <if test="enti.director != null">
+                director=#{enti.director},
+            </if>
+            <if test="enti.dur != null">
+                dur=#{enti.dur},
+            </if>
+            <if test="enti.imax != null">
+                imax=#{enti.imax},
+            </if>
+            <if test="enti.img != null">
+                img=#{enti.img},
+            </if>
+            <if test="enti.late != null">
+                late=#{enti.late},
+            </if>
+            <if test="enti.name != null">
+                name=#{enti.name},
+            </if>
+            <if test="enti.pn != null">
+                pn=#{enti.pn},
+            </if>
+            <if test="enti.presale != null">
+                preSale=#{enti.presale},
+            </if>
+            <if test="enti.rt != null">
+                rt=#{enti.rt},
+            </if>
+            <if test="enti.sc != null">
+                sc=#{enti.sc},
+            </if>
+            <if test="enti.scm != null">
+                scm=#{enti.scm},
+            </if>
+            <if test="enti.showdata != null">
+                showData=#{enti.showdata},
+            </if>
+            <if test="enti.showinfo != null">
+                showinfo=#{enti.showinfo},
+            </if>
+            <if test="enti.sn != null">
+                sn=#{enti.sn},
+            </if>
+            <if test="enti.snum != null">
+                snum=#{enti.snum},
+            </if>
+            <if test="enti.src != null">
+                src=#{enti.src},
+            </if>
+            <if test="enti.star != null">
+                star=#{enti.star},
+            </if>
+            <if test="enti.time != null">
+                time=#{enti.time},
+            </if>
+            <if test="enti.vd != null">
+                vd=#{enti.vd},
+            </if>
+            <if test="enti.ver != null">
+                ver=#{enti.ver},
+            </if>
+            <if test="enti.wish != null">
+                wish=#{enti.wish},
+            </if>
+            <if test="enti.maoyanjson != null">
+                maoyanjson=#{enti.maoyanjson},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>
