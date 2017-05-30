@@ -1,7 +1,8 @@
 package com.sysu.service;
 import java.util.List;
+
+import com.sysu.common.Assist;
 import com.sysu.pojo.User;
-import com.common.Assist;
 public interface UserService{
     long getUserRowCount(Assist assist);
     List<User> selectUser(Assist assist);

@@ -1,4 +1,4 @@
-package com.common;
+package com.sysu.common;
 
 import java.util.ArrayList;
 import java.util.List;

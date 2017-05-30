@@ -1,8 +1,9 @@
 package com.sysu.serviceImpl;
 import java.util.List;
+
+import com.sysu.common.Assist;
 import com.sysu.mapper.UserDao;
 import com.sysu.pojo.User;
-import com.common.Assist;
 import com.sysu.service.UserService;
 public class UserServiceImpl implements UserService{
     private UserDao userDao;
