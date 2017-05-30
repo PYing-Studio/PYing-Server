@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sysu.mapper.UserDao">
+    <resultMap id="result_User_Map" type="com.sysu.pojo.User">
+        <id column="User0" property="id" />
+        <result column="User1" property="username" />
+        <result column="User2" property="password" />
+        <result column="User3" property="phone" />
+        <result column="User4" property="email" />
+        <result column="User5" property="nickname" />
+        <result column="User6" property="image" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="user_Column">
+        user.id as User0
+        ,user.username as User1
+        ,user.password as User2
+        ,user.phone as User3
+        ,user.email as User4
+        ,user.nickname as User5
+        ,user.image as User6
+    </sql>
+
+    <select id="getUserRowCount" parameterType="com.common.Assist" resultType="java.lang.Long">
+        select count(id) from user
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectUser" parameterType="com.common.Assist"  resultMap="result_User_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="user_Column" /> 
+            </otherwise>
+        </choose>
+        from user
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectUserById" parameterType="java.lang.Integer" resultMap="result_User_Map">
+        select 
+            <include refid="user_Column" /> 
+        from user
+        where user.id = #{id}
+    </select> 
+
+
+    <insert id="insertUser" parameterType="com.sysu.pojo.User">
+        insert into user(id,username,password,phone,email,nickname,image) 
+        values(#{id},#{username},#{password},#{phone},#{email},#{nickname},#{image})
+    </insert>
+
+    <insert id="insertNonEmptyUser" parameterType="com.sysu.pojo.User">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="username != null">username,</if>
+            <if test="password != null">password,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="nickname != null">nickname,</if>
+            <if test="image != null">image,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="username != null"> #{username},</if>
+            <if test="password != null"> #{password},</if>
+            <if test="phone != null"> #{phone},</if>
+            <if test="email != null"> #{email},</if>
+            <if test="nickname != null"> #{nickname},</if>
+            <if test="image != null"> #{image},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteUserById" parameterType="java.lang.Integer">
+        delete from user
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteUser" parameterType="com.common.Assist">
+        delete from user
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateUserById" parameterType="com.sysu.pojo.User">
+        update user set
+            username=#{username}
+            ,password=#{password}
+            ,phone=#{phone}
+            ,email=#{email}
+            ,nickname=#{nickname}
+            ,image=#{image}
+        where id=#{id}
+    </update>
+
+    <update id="updateNonEmptyUserById" parameterType="com.sysu.pojo.User">
+        update user
+        <set>
+            <if test="username != null">
+                username=#{username},
+            </if>
+            <if test="password != null">
+                password=#{password},
+            </if>
+            <if test="phone != null">
+                phone=#{phone},
+            </if>
+            <if test="email != null">
+                email=#{email},
+            </if>
+            <if test="nickname != null">
+                nickname=#{nickname},
+            </if>
+            <if test="image != null">
+                image=#{image},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateUser" parameterType="map">
+        update user
+        <set>
+                id=#{enti.id},
+                username=#{enti.username},
+                password=#{enti.password},
+                phone=#{enti.phone},
+                email=#{enti.email},
+                nickname=#{enti.nickname},
+                image=#{enti.image},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyUser" parameterType="map">
+        update user
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.username != null">
+                username=#{enti.username},
+            </if>
+            <if test="enti.password != null">
+                password=#{enti.password},
+            </if>
+            <if test="enti.phone != null">
+                phone=#{enti.phone},
+            </if>
+            <if test="enti.email != null">
+                email=#{enti.email},
+            </if>
+            <if test="enti.nickname != null">
+                nickname=#{enti.nickname},
+            </if>
+            <if test="enti.image != null">
+                image=#{enti.image},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>
