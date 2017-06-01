@@ -1,6 +1,10 @@
 package com.sysu.pojo;
-public class Yueyin {
-    private Integer id;
+
+import java.io.Serializable;
+
+public class Yueyin implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private Integer id;
     private String username;
     private Integer movieId;
     private String moveName;

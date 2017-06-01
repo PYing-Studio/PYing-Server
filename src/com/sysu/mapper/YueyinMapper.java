@@ -3,7 +3,7 @@ import com.sysu.pojo.Yueyin;
 import java.util.List;
 import com.sysu.common.Assist;
 import org.apache.ibatis.annotations.Param;
-public interface YueyinDao{
+public interface YueyinMapper{
     long getYueyinRowCount(Assist assist);
     List<Yueyin> selectYueyin(Assist assist);
     Yueyin selectYueyinById(Integer id);

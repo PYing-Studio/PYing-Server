@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value = "/yueyin")
 public class YueController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody

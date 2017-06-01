@@ -1,62 +1,62 @@
 package com.sysu.serviceImpl;
 import java.util.List;
-import com.sysu.mapper.YueyinDao;
+import com.sysu.mapper.YueyinMapper;
 import com.sysu.pojo.Yueyin;
 import com.sysu.common.Assist;
 import com.sysu.service.YueyinService;
 public class YueyinServiceImpl implements YueyinService{
-    private YueyinDao yueyinDao;
+    private YueyinMapper yueyinMapper;
     @Override
     public long getYueyinRowCount(Assist assist){
-        return yueyinDao.getYueyinRowCount(assist);
+        return yueyinMapper.getYueyinRowCount(assist);
     }
     @Override
     public List<Yueyin> selectYueyin(Assist assist){
-        return yueyinDao.selectYueyin(assist);
+        return yueyinMapper.selectYueyin(assist);
     }
     @Override
     public Yueyin selectYueyinById(Integer id){
-        return yueyinDao.selectYueyinById(id);
+        return yueyinMapper.selectYueyinById(id);
     }
     @Override
     public int insertYueyin(Yueyin value){
-        return yueyinDao.insertYueyin(value);
+        return yueyinMapper.insertYueyin(value);
     }
     @Override
     public int insertNonEmptyYueyin(Yueyin value){
-        return yueyinDao.insertNonEmptyYueyin(value);
+        return yueyinMapper.insertNonEmptyYueyin(value);
     }
     @Override
     public int deleteYueyinById(Integer id){
-        return yueyinDao.deleteYueyinById(id);
+        return yueyinMapper.deleteYueyinById(id);
     }
     @Override
     public int deleteYueyin(Assist assist){
-        return yueyinDao.deleteYueyin(assist);
+        return yueyinMapper.deleteYueyin(assist);
     }
     @Override
     public int updateYueyinById(Yueyin enti){
-        return yueyinDao.updateYueyinById(enti);
+        return yueyinMapper.updateYueyinById(enti);
     }
     @Override
     public int updateYueyin(Yueyin value, Assist assist){
-        return yueyinDao.updateYueyin(value,assist);
+        return yueyinMapper.updateYueyin(value,assist);
     }
     @Override
     public int updateNonEmptyYueyinById(Yueyin enti){
-        return yueyinDao.updateNonEmptyYueyinById(enti);
+        return yueyinMapper.updateNonEmptyYueyinById(enti);
     }
     @Override
     public int updateNonEmptyYueyin(Yueyin value, Assist assist){
-        return yueyinDao.updateNonEmptyYueyin(value,assist);
+        return yueyinMapper.updateNonEmptyYueyin(value,assist);
     }
 
-    public YueyinDao getYueyinDao() {
-        return this.yueyinDao;
+    public YueyinMapper getYueyinMapper() {
+        return this.yueyinMapper;
     }
 
-    public void setYueyinDao(YueyinDao yueyinDao) {
-        this.yueyinDao = yueyinDao;
+    public void setYueyinMapper(YueyinMapper yueyinMapper) {
+        this.yueyinMapper = yueyinMapper;
     }
 
 }

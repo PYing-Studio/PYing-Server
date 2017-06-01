@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50522
 File Encoding         : 65001
 
-Date: 2017-05-31 00:07:24
+Date: 2017-06-01 01:50:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -163,11 +163,13 @@ CREATE TABLE `user` (
   `nickname` varchar(255) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
+INSERT INTO `user` VALUES ('4', 'string', '45578b9c53a90f64bd3e380ba21abef1', 'string', 'string', 'string', null);
+INSERT INTO `user` VALUES ('5', 'lin', '0dc42add863c4cc346e110d68cd1bfe0', 'string', 'string', 'string', null);
 
 -- ----------------------------
 -- Table structure for `yueyin`

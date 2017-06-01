@@ -3,7 +3,7 @@ import com.sysu.pojo.Collect;
 import java.util.List;
 import com.sysu.common.Assist;
 import org.apache.ibatis.annotations.Param;
-public interface CollectDao{
+public interface CollectMapper{
     long getCollectRowCount(Assist assist);
     List<Collect> selectCollect(Assist assist);
     Collect selectCollectById(Integer id);

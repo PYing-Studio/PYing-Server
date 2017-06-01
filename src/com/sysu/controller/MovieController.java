@@ -17,7 +17,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping(value = "/movie")
 public class MovieController {
     @RequestMapping(value = "hotMovies", method = RequestMethod.GET)
     @ResponseBody

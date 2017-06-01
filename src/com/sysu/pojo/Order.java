@@ -4,8 +4,9 @@ public class Order {
     private String username;
     private Integer movieId;
     private String moveName;
-    private String cinemaId;
+    private Integer cinemaId;
     private String cinemaName;
+    private java.util.Date showTime;
     private java.util.Date payTime;
     private java.util.Date makeTime;
     private Integer num;
@@ -14,7 +15,7 @@ public class Order {
     public Order() {
         super();
     }
-    public Order(Integer id,String username,Integer movieId,String moveName,String cinemaId,String cinemaName,java.util.Date payTime,java.util.Date makeTime,Integer num,String seat,Integer statue) {
+    public Order(Integer id,String username,Integer movieId,String moveName,Integer cinemaId,String cinemaName,java.util.Date showTime,java.util.Date payTime,java.util.Date makeTime,Integer num,String seat,Integer statue) {
         super();
         this.id = id;
         this.username = username;
@@ -22,6 +23,7 @@ public class Order {
         this.moveName = moveName;
         this.cinemaId = cinemaId;
         this.cinemaName = cinemaName;
+        this.showTime = showTime;
         this.payTime = payTime;
         this.makeTime = makeTime;
         this.num = num;
@@ -60,11 +62,11 @@ public class Order {
         this.moveName = moveName;
     }
 
-    public String getCinemaId() {
+    public Integer getCinemaId() {
         return this.cinemaId;
     }
 
-    public void setCinemaId(String cinemaId) {
+    public void setCinemaId(Integer cinemaId) {
         this.cinemaId = cinemaId;
     }
 
@@ -74,6 +76,14 @@ public class Order {
 
     public void setCinemaName(String cinemaName) {
         this.cinemaName = cinemaName;
+    }
+
+    public java.util.Date getShowTime() {
+        return this.showTime;
+    }
+
+    public void setShowTime(java.util.Date showTime) {
+        this.showTime = showTime;
     }
 
     public java.util.Date getPayTime() {

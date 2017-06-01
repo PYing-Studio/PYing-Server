@@ -1,62 +1,59 @@
 package com.sysu.serviceImpl;
 import java.util.List;
-import com.sysu.mapper.OrderDao;
-import com.sysu.pojo.Order;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.sysu.common.Assist;
+import com.sysu.mapper.OrderMapper;
+import com.sysu.pojo.Order;
 import com.sysu.service.OrderService;
+import com.sysu.utils.DateUtil;
 public class OrderServiceImpl implements OrderService{
-    private OrderDao orderDao;
-    @Override
-    public long getOrderRowCount(Assist assist){
-        return orderDao.getOrderRowCount(assist);
-    }
-    @Override
-    public List<Order> selectOrder(Assist assist){
-        return orderDao.selectOrder(assist);
-    }
-    @Override
-    public Order selectOrderById(Integer id){
-        return orderDao.selectOrderById(id);
-    }
-    @Override
-    public int insertOrder(Order value){
-        return orderDao.insertOrder(value);
-    }
-    @Override
-    public int insertNonEmptyOrder(Order value){
-        return orderDao.insertNonEmptyOrder(value);
-    }
-    @Override
-    public int deleteOrderById(Integer id){
-        return orderDao.deleteOrderById(id);
-    }
-    @Override
-    public int deleteOrder(Assist assist){
-        return orderDao.deleteOrder(assist);
-    }
-    @Override
-    public int updateOrderById(Order enti){
-        return orderDao.updateOrderById(enti);
-    }
-    @Override
-    public int updateOrder(Order value, Assist assist){
-        return orderDao.updateOrder(value,assist);
-    }
-    @Override
-    public int updateNonEmptyOrderById(Order enti){
-        return orderDao.updateNonEmptyOrderById(enti);
-    }
-    @Override
-    public int updateNonEmptyOrder(Order value, Assist assist){
-        return orderDao.updateNonEmptyOrder(value,assist);
-    }
+	@Autowired
+	private OrderMapper orderMapper;
 
-    public OrderDao getOrderDao() {
-        return this.orderDao;
-    }
+	@Override
+	public List<Order> getOrdersByUsername(String username) {
+		Assist assist = new Assist();
+		assist.setRequires(Assist.and_eq("username", username), Assist.and_neq("statue", "3"), Assist.and_neq("statue", "0"));
+		List<Order> listOrders = orderMapper.selectOrder(assist);
+		return listOrders;
+	}
 
-    public void setOrderDao(OrderDao orderDao) {
-        this.orderDao = orderDao;
-    }
+	@Override
+	public Order getOrdersById(Integer order_id) {
+		return orderMapper.selectOrderById(order_id);
+	}
+
+	@Override
+	public int insertOrder(Order order) {
+		return orderMapper.insertOrder(order);
+	}
+	
+	@Override
+	public int updateOrder(Integer order_id, int statues) {
+		Order order = orderMapper.selectOrderById(order_id);
+		order.setStatue(statues);
+		return orderMapper.updateOrderById(order);
+	}
+
+	@Override
+	public int deleteOrder(Integer order_id) {
+		return updateOrder(order_id, 0);
+	}
+
+	@Override
+	public int payOrder(Integer order_id) {
+		Order order = orderMapper.selectOrderById(order_id);
+		order.setStatue(1);
+		order.setPayTime(DateUtil.getCurrrentDate());
+		return orderMapper.updateOrderById(order);
+	}
+
+	@Override
+	public int overPayTimeOrder(Integer order_id) {
+		return updateOrder(order_id, 3);
+	}
+
 
 }

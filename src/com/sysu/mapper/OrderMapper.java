@@ -3,7 +3,7 @@ import com.sysu.pojo.Order;
 import java.util.List;
 import com.sysu.common.Assist;
 import org.apache.ibatis.annotations.Param;
-public interface OrderDao{
+public interface OrderMapper{
     long getOrderRowCount(Assist assist);
     List<Order> selectOrder(Assist assist);
     Order selectOrderById(Integer id);

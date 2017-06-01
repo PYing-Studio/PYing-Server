@@ -1,6 +1,10 @@
 package com.sysu.pojo;
-public class HotMovie {
-    private Integer id;
+
+import java.io.Serializable;
+
+public class HotMovie implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private Integer id;
     private Integer is3d;
     private String cat;
     private Integer cnms;

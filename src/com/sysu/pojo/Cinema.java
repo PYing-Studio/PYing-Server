@@ -1,7 +1,10 @@
 package com.sysu.pojo;
-public class Cinema implements java.io.Serializable {
-    private static final long serialVersionUID = 1L;
-    private Integer id;
+
+import java.io.Serializable;
+
+public class Cinema implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private Integer id;
     private Integer cityId;
     private String cityName;
     private String addr;

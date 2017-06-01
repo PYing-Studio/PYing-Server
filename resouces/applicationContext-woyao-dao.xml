@@ -20,8 +20,8 @@
 		<property name="typeAliasesPackage" value="com.sysu.pojo" />
 		<property name="mapperLocations">
 			<list>
-				<value>classpath:/mapper/pyin/*.xml</value>
-				<value>classpath:/mapper/pyin/*/*.xml</value>
+				<value>classpath:/mybatis/mapper/*.xml</value>
+				<value>classpath:/mybatis/mapper/*/*.xml</value>
 			</list>
 		</property>
 		<property name="configurationProperties">

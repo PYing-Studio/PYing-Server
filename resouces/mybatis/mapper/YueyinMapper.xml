@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sysu.mapper.YueyinDao">
+<mapper namespace="com.sysu.mapper.YueyinMapper">
     <resultMap id="result_Yueyin_Map" type="com.sysu.pojo.Yueyin">
         <id column="Yueyin0" property="id" />
         <result column="Yueyin1" property="username" />

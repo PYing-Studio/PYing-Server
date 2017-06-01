@@ -12,11 +12,11 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>dispatcherServlet</servlet-name>
-    <url-pattern>*.do</url-pattern>
+    <url-pattern>/*</url-pattern>
   </servlet-mapping>
   <filter>
     <filter-name>CorsFilter</filter-name>
-    <filter-class>com.luwei.hackvr.filter.CorsFilter</filter-class>
+    <filter-class>com.sysu.filter.CorsFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>CorsFilter</filter-name>

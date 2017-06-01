@@ -1,5 +1,6 @@
 package com.sysu.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,15 +30,35 @@ public class DateUtil {
 		String str = sdf.format(date);
 		return str;
 	}
+	
+	public static String formatDate(Date date) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sdf.format(date);
+	}
+
+	public static Date parse(String strDate) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sdf.parse(strDate);
+	}
 
 	// 两个date之间相差多少天
 	public static int getOffsetBetweenDay(Date begin, Date end) {
 		return (int) ((end.getTime() - begin.getTime()) / 86400000);
 	}
+	
+	// 两个date之间相差多少天
+	public static int getOffsetBetweenDay(Date begin, Date end, int base) {
+		return (int) ((end.getTime() - begin.getTime()) / base);
+	}
 
 	// 给定一个时间，判断与今天相差多少天
 	public static int getOffsetFromToday(Date date) {
 		return (int) ((System.currentTimeMillis() - date.getTime()) / 86400000);
+	}
+	
+	// 给定一个时间，判断与今天相差多少天
+	public static int getOffsetFromToday(Date date, int base) {
+		return (int) ((System.currentTimeMillis() - date.getTime()) / base);
 	}
 
 	// 对Date进行日期单位的加减法

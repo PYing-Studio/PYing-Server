@@ -1,6 +1,11 @@
 package com.sysu.pojo;
-public class Collect {
-    private Integer id;
+
+import java.io.Serializable;
+
+public class Collect implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	private Integer id;
     private String username;
     private Integer movieId;
     private String movieName;

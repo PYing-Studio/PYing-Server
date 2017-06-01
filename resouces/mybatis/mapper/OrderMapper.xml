@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sysu.mapper.OrderDao">
+<mapper namespace="com.sysu.mapper.OrderMapper">
     <resultMap id="result_Order_Map" type="com.sysu.pojo.Order">
         <id column="Order0" property="id" />
         <result column="Order1" property="username" />
@@ -8,11 +8,12 @@
         <result column="Order3" property="moveName" />
         <result column="Order4" property="cinemaId" />
         <result column="Order5" property="cinemaName" />
-        <result column="Order6" property="payTime" />
-        <result column="Order7" property="makeTime" />
-        <result column="Order8" property="num" />
-        <result column="Order9" property="seat" />
-        <result column="Order10" property="statue" />
+        <result column="Order6" property="showTime" />
+        <result column="Order7" property="payTime" />
+        <result column="Order8" property="makeTime" />
+        <result column="Order9" property="num" />
+        <result column="Order10" property="seat" />
+        <result column="Order11" property="statue" />
     </resultMap>
 
     <sql id="Assist">
@@ -38,11 +39,12 @@
         ,order.move_name as Order3
         ,order.cinema_id as Order4
         ,order.cinema_name as Order5
-        ,order.pay_time as Order6
-        ,order.make_time as Order7
-        ,order.num as Order8
-        ,order.seat as Order9
-        ,order.statue as Order10
+        ,order.show_time as Order6
+        ,order.pay_time as Order7
+        ,order.make_time as Order8
+        ,order.num as Order9
+        ,order.seat as Order10
+        ,order.statue as Order11
     </sql>
 
     <select id="getOrderRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
@@ -72,8 +74,8 @@
 
 
     <insert id="insertOrder" parameterType="com.sysu.pojo.Order">
-        insert into order(id,username,movie_id,move_name,cinema_id,cinema_name,pay_time,make_time,num,seat,statue) 
-        values(#{id},#{username},#{movieId},#{moveName},#{cinemaId},#{cinemaName},#{payTime},#{makeTime},#{num},#{seat},#{statue})
+        insert into order(id,username,movie_id,move_name,cinema_id,cinema_name,show_time,pay_time,make_time,num,seat,statue) 
+        values(#{id},#{username},#{movieId},#{moveName},#{cinemaId},#{cinemaName},#{showTime},#{payTime},#{makeTime},#{num},#{seat},#{statue})
     </insert>
 
     <insert id="insertNonEmptyOrder" parameterType="com.sysu.pojo.Order">
@@ -85,6 +87,7 @@
             <if test="moveName != null">move_name,</if>
             <if test="cinemaId != null">cinema_id,</if>
             <if test="cinemaName != null">cinema_name,</if>
+            <if test="showTime != null">show_time,</if>
             <if test="payTime != null">pay_time,</if>
             <if test="makeTime != null">make_time,</if>
             <if test="num != null">num,</if>
@@ -98,6 +101,7 @@
             <if test="moveName != null"> #{moveName},</if>
             <if test="cinemaId != null"> #{cinemaId},</if>
             <if test="cinemaName != null"> #{cinemaName},</if>
+            <if test="showTime != null"> #{showTime},</if>
             <if test="payTime != null"> #{payTime},</if>
             <if test="makeTime != null"> #{makeTime},</if>
             <if test="num != null"> #{num},</if>
@@ -123,6 +127,7 @@
             ,move_name=#{moveName}
             ,cinema_id=#{cinemaId}
             ,cinema_name=#{cinemaName}
+            ,show_time=#{showTime}
             ,pay_time=#{payTime}
             ,make_time=#{makeTime}
             ,num=#{num}
@@ -148,6 +153,9 @@
             </if>
             <if test="cinemaName != null">
                 cinema_name=#{cinemaName},
+            </if>
+            <if test="showTime != null">
+                show_time=#{showTime},
             </if>
             <if test="payTime != null">
                 pay_time=#{payTime},
@@ -177,6 +185,7 @@
                 move_name=#{enti.moveName},
                 cinema_id=#{enti.cinemaId},
                 cinema_name=#{enti.cinemaName},
+                show_time=#{enti.showTime},
                 pay_time=#{enti.payTime},
                 make_time=#{enti.makeTime},
                 num=#{enti.num},
@@ -206,6 +215,9 @@
             </if>
             <if test="enti.cinemaName != null">
                 cinema_name=#{enti.cinemaName},
+            </if>
+            <if test="enti.showTime != null">
+                show_time=#{enti.showTime},
             </if>
             <if test="enti.payTime != null">
                 pay_time=#{enti.payTime},

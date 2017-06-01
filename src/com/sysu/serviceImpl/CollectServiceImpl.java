@@ -1,62 +1,62 @@
 package com.sysu.serviceImpl;
 import java.util.List;
-import com.sysu.mapper.CollectDao;
+import com.sysu.mapper.CollectMapper;
 import com.sysu.pojo.Collect;
 import com.sysu.common.Assist;
 import com.sysu.service.CollectService;
 public class CollectServiceImpl implements CollectService{
-    private CollectDao collectDao;
+    private CollectMapper collectMapper;
     @Override
     public long getCollectRowCount(Assist assist){
-        return collectDao.getCollectRowCount(assist);
+        return collectMapper.getCollectRowCount(assist);
     }
     @Override
     public List<Collect> selectCollect(Assist assist){
-        return collectDao.selectCollect(assist);
+        return collectMapper.selectCollect(assist);
     }
     @Override
     public Collect selectCollectById(Integer id){
-        return collectDao.selectCollectById(id);
+        return collectMapper.selectCollectById(id);
     }
     @Override
     public int insertCollect(Collect value){
-        return collectDao.insertCollect(value);
+        return collectMapper.insertCollect(value);
     }
     @Override
     public int insertNonEmptyCollect(Collect value){
-        return collectDao.insertNonEmptyCollect(value);
+        return collectMapper.insertNonEmptyCollect(value);
     }
     @Override
     public int deleteCollectById(Integer id){
-        return collectDao.deleteCollectById(id);
+        return collectMapper.deleteCollectById(id);
     }
     @Override
     public int deleteCollect(Assist assist){
-        return collectDao.deleteCollect(assist);
+        return collectMapper.deleteCollect(assist);
     }
     @Override
     public int updateCollectById(Collect enti){
-        return collectDao.updateCollectById(enti);
+        return collectMapper.updateCollectById(enti);
     }
     @Override
     public int updateCollect(Collect value, Assist assist){
-        return collectDao.updateCollect(value,assist);
+        return collectMapper.updateCollect(value,assist);
     }
     @Override
     public int updateNonEmptyCollectById(Collect enti){
-        return collectDao.updateNonEmptyCollectById(enti);
+        return collectMapper.updateNonEmptyCollectById(enti);
     }
     @Override
     public int updateNonEmptyCollect(Collect value, Assist assist){
-        return collectDao.updateNonEmptyCollect(value,assist);
+        return collectMapper.updateNonEmptyCollect(value,assist);
     }
 
-    public CollectDao getCollectDao() {
-        return this.collectDao;
+    public CollectMapper getCollectMapper() {
+        return this.collectMapper;
     }
 
-    public void setCollectDao(CollectDao collectDao) {
-        this.collectDao = collectDao;
+    public void setCollectMapper(CollectMapper collectMapper) {
+        this.collectMapper = collectMapper;
     }
 
 }
