@@ -18,9 +18,6 @@ public class UserServiceImpl implements UserService{
     
 	@Override
 	public User login(String userName, String password) {
-//		UserExample example = new UserExample();
-//		example.createCriteria().andUserNameEqualTo(userName).andPasswdEqualTo(Md5Encrypt.md5(password));
-//		List<User> userList = userMapper.selectByExample(example);
 		Assist assist = new Assist();
 		assist.setRequires(Assist.and_eq("username", userName), Assist.and_eq("password", Md5Encrypt.md5(password)));
 		List<User> userList = userMapper.selectUser(assist);
@@ -40,6 +37,23 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int insertUser(User value) {
 		return userMapper.insertUser(value);
+	}
+
+	@Override
+	public User getUser(String username) {
+		Assist assist = new Assist();
+		assist.setRequires(Assist.and_eq("username", username));
+		List<User> list = userMapper.selectUser(assist);
+		if (CollectionUtils.isEmpty(list)) {
+			return null;
+		} else {
+			return list.get(0);
+		}
+	}
+
+	@Override
+	public int updateUser(User user) {
+		return userMapper.updateUserById(user);
 	}
 
 }

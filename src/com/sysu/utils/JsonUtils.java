@@ -4,18 +4,44 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONObject;
 
+
 /**
 * Json工具类，实现了实体类和Json数据格式之间的互转功能 使用实例：<br>
 */
 public class JsonUtils {
+    /**
+     * 将一个实体类list转换成Json数组的数据格式
+     * 
+     * @param list
+     *            需要转换的实体类对象
+     * @return 转换后的ordersList格式字符串
+     */
+	public static  List<Map<String, Object>> changeListToMap(List<?> list, String[] ignoreKey) {
+		List<Map<String, Object>> ordersList = new LinkedList<Map<String, Object>>();
+		
+		for (Object order : list) {
+			Map<String, Object> map = BeansUtils.transBean2Map(order);
+			if (ignoreKey != null) {
+				for (int i = 0; i < ignoreKey.length; i++) {
+					map.remove(ignoreKey[i]);
+				}
+			}
+			ordersList.add(map);
+		}
+		return ordersList;
+	}
+	
+	
     /**
      * 将一个实体类对象转换成Json数据格式
      * 

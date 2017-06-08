@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sysu.mapper.IntheaterMovieMapper">
+    <resultMap id="result_IntheaterMovie_Map" type="com.sysu.pojo.IntheaterMovie">
+        <id column="IntheaterMovie0" property="id" />
+        <result column="IntheaterMovie1" property="movieId" />
+        <result column="IntheaterMovie2" property="cinemaId" />
+        <result column="IntheaterMovie3" property="cinemaName" />
+        <result column="IntheaterMovie4" property="movieName" />
+        <result column="IntheaterMovie5" property="num" />
+        <result column="IntheaterMovie6" property="leaveNum" />
+        <result column="IntheaterMovie7" property="seat" />
+        <result column="IntheaterMovie8" property="showTime" />
+        <result column="IntheaterMovie9" property="maoyanjson" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="intheater_movie_Column">
+        intheater_movie.id as IntheaterMovie0
+        ,intheater_movie.movie_id as IntheaterMovie1
+        ,intheater_movie.cinema_id as IntheaterMovie2
+        ,intheater_movie.cinema_name as IntheaterMovie3
+        ,intheater_movie.movie_name as IntheaterMovie4
+        ,intheater_movie.num as IntheaterMovie5
+        ,intheater_movie.leave_num as IntheaterMovie6
+        ,intheater_movie.seat as IntheaterMovie7
+        ,intheater_movie.show_time as IntheaterMovie8
+        ,intheater_movie.maoyanjson as IntheaterMovie9
+    </sql>
+
+    <select id="getIntheaterMovieRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
+        select count(id) from intheater_movie
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectIntheaterMovie" parameterType="com.sysu.common.Assist"  resultMap="result_IntheaterMovie_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="intheater_movie_Column" /> 
+            </otherwise>
+        </choose>
+        from intheater_movie
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="group !=null">${group}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectIntheaterMovieById" parameterType="java.lang.Integer" resultMap="result_IntheaterMovie_Map">
+        select 
+            <include refid="intheater_movie_Column" /> 
+        from intheater_movie
+        where intheater_movie.id = #{id}
+    </select> 
+
+
+    <insert id="insertIntheaterMovie" parameterType="com.sysu.pojo.IntheaterMovie">
+        insert into intheater_movie(id,movie_id,cinema_id,cinema_name,movie_name,num,leave_num,seat,show_time,maoyanjson) 
+        values(#{id},#{movieId},#{cinemaId},#{cinemaName},#{movieName},#{num},#{leaveNum},#{seat},#{showTime},#{maoyanjson})
+    </insert>
+
+    <insert id="insertNonEmptyIntheaterMovie" parameterType="com.sysu.pojo.IntheaterMovie">
+        insert into intheater_movie
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="movieId != null">movie_id,</if>
+            <if test="cinemaId != null">cinema_id,</if>
+            <if test="cinemaName != null">cinema_name,</if>
+            <if test="movieName != null">movie_name,</if>
+            <if test="num != null">num,</if>
+            <if test="leaveNum != null">leave_num,</if>
+            <if test="seat != null">seat,</if>
+            <if test="showTime != null">show_time,</if>
+            <if test="maoyanjson != null">maoyanjson,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="movieId != null"> #{movieId},</if>
+            <if test="cinemaId != null"> #{cinemaId},</if>
+            <if test="cinemaName != null"> #{cinemaName},</if>
+            <if test="movieName != null"> #{movieName},</if>
+            <if test="num != null"> #{num},</if>
+            <if test="leaveNum != null"> #{leaveNum},</if>
+            <if test="seat != null"> #{seat},</if>
+            <if test="showTime != null"> #{showTime},</if>
+            <if test="maoyanjson != null"> #{maoyanjson},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteIntheaterMovieById" parameterType="java.lang.Integer">
+        delete from intheater_movie
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteIntheaterMovie" parameterType="com.sysu.common.Assist">
+        delete from intheater_movie
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateIntheaterMovieById" parameterType="com.sysu.pojo.IntheaterMovie">
+        update intheater_movie set
+            movie_id=#{movieId}
+            ,cinema_id=#{cinemaId}
+            ,cinema_name=#{cinemaName}
+            ,movie_name=#{movieName}
+            ,num=#{num}
+            ,leave_num=#{leaveNum}
+            ,seat=#{seat}
+            ,show_time=#{showTime}
+            ,maoyanjson=#{maoyanjson}
+        where id=#{id}
+    </update>
+
+    <update id="updateNonEmptyIntheaterMovieById" parameterType="com.sysu.pojo.IntheaterMovie">
+        update intheater_movie
+        <set>
+            <if test="movieId != null">
+                movie_id=#{movieId},
+            </if>
+            <if test="cinemaId != null">
+                cinema_id=#{cinemaId},
+            </if>
+            <if test="cinemaName != null">
+                cinema_name=#{cinemaName},
+            </if>
+            <if test="movieName != null">
+                movie_name=#{movieName},
+            </if>
+            <if test="num != null">
+                num=#{num},
+            </if>
+            <if test="leaveNum != null">
+                leave_num=#{leaveNum},
+            </if>
+            <if test="seat != null">
+                seat=#{seat},
+            </if>
+            <if test="showTime != null">
+                show_time=#{showTime},
+            </if>
+            <if test="maoyanjson != null">
+                maoyanjson=#{maoyanjson},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateIntheaterMovie" parameterType="map">
+        update intheater_movie
+        <set>
+                id=#{enti.id},
+                movie_id=#{enti.movieId},
+                cinema_id=#{enti.cinemaId},
+                cinema_name=#{enti.cinemaName},
+                movie_name=#{enti.movieName},
+                num=#{enti.num},
+                leave_num=#{enti.leaveNum},
+                seat=#{enti.seat},
+                show_time=#{enti.showTime},
+                maoyanjson=#{enti.maoyanjson},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyIntheaterMovie" parameterType="map">
+        update intheater_movie
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.movieId != null">
+                movie_id=#{enti.movieId},
+            </if>
+            <if test="enti.cinemaId != null">
+                cinema_id=#{enti.cinemaId},
+            </if>
+            <if test="enti.cinemaName != null">
+                cinema_name=#{enti.cinemaName},
+            </if>
+            <if test="enti.movieName != null">
+                movie_name=#{enti.movieName},
+            </if>
+            <if test="enti.num != null">
+                num=#{enti.num},
+            </if>
+            <if test="enti.leaveNum != null">
+                leave_num=#{enti.leaveNum},
+            </if>
+            <if test="enti.seat != null">
+                seat=#{enti.seat},
+            </if>
+            <if test="enti.showTime != null">
+                show_time=#{enti.showTime},
+            </if>
+            <if test="enti.maoyanjson != null">
+                maoyanjson=#{enti.maoyanjson},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

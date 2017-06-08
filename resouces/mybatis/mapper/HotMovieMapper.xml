@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sysu.mapper.HotMovieMapper">
+    <resultMap id="result_HotMovie_Map" type="com.sysu.pojo.HotMovie">
+        <id column="HotMovie0" property="id" />
+        <result column="HotMovie1" property="name" />
+        <result column="HotMovie2" property="img" />
+        <result column="HotMovie3" property="cat" />
+        <result column="HotMovie4" property="star" />
+        <result column="HotMovie5" property="sc" />
+        <result column="HotMovie6" property="vd" />
+        <result column="HotMovie7" property="dir" />
+        <result column="HotMovie8" property="statue" />
+        <result column="HotMovie9" property="inserttime" />
+        <result column="HotMovie10" property="maoyanjson" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="hot_movie_Column">
+        hot_movie.id as HotMovie0
+        ,hot_movie.name as HotMovie1
+        ,hot_movie.img as HotMovie2
+        ,hot_movie.cat as HotMovie3
+        ,hot_movie.star as HotMovie4
+        ,hot_movie.sc as HotMovie5
+        ,hot_movie.vd as HotMovie6
+        ,hot_movie.dir as HotMovie7
+        ,hot_movie.statue as HotMovie8
+        ,hot_movie.insertTime as HotMovie9
+        ,hot_movie.maoyanjson as HotMovie10
+    </sql>
+
+    <select id="getHotMovieRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
+        select count(id) from hot_movie
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectHotMovie" parameterType="com.sysu.common.Assist"  resultMap="result_HotMovie_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="hot_movie_Column" /> 
+            </otherwise>
+        </choose>
+        from hot_movie
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectHotMovieById" parameterType="java.lang.Integer" resultMap="result_HotMovie_Map">
+        select 
+            <include refid="hot_movie_Column" /> 
+        from hot_movie
+        where hot_movie.id = #{id}
+    </select> 
+
+
+    <insert id="insertHotMovie" parameterType="com.sysu.pojo.HotMovie">
+        insert into hot_movie(id,name,img,cat,star,sc,vd,dir,statue,insertTime,maoyanjson) 
+        values(#{id},#{name},#{img},#{cat},#{star},#{sc},#{vd},#{dir},#{statue},#{inserttime},#{maoyanjson})
+    </insert>
+
+    <insert id="insertNonEmptyHotMovie" parameterType="com.sysu.pojo.HotMovie">
+        insert into hot_movie
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="img != null">img,</if>
+            <if test="cat != null">cat,</if>
+            <if test="star != null">star,</if>
+            <if test="sc != null">sc,</if>
+            <if test="vd != null">vd,</if>
+            <if test="dir != null">dir,</if>
+            <if test="statue != null">statue,</if>
+            <if test="inserttime != null">insertTime,</if>
+            <if test="maoyanjson != null">maoyanjson,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="name != null"> #{name},</if>
+            <if test="img != null"> #{img},</if>
+            <if test="cat != null"> #{cat},</if>
+            <if test="star != null"> #{star},</if>
+            <if test="sc != null"> #{sc},</if>
+            <if test="vd != null"> #{vd},</if>
+            <if test="dir != null"> #{dir},</if>
+            <if test="statue != null"> #{statue},</if>
+            <if test="inserttime != null"> #{inserttime},</if>
+            <if test="maoyanjson != null"> #{maoyanjson},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteHotMovieById" parameterType="java.lang.Integer">
+        delete from hot_movie
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteHotMovie" parameterType="com.sysu.common.Assist">
+        delete from hot_movie
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateHotMovieById" parameterType="com.sysu.pojo.HotMovie">
+        update hot_movie set
+            name=#{name}
+            ,img=#{img}
+            ,cat=#{cat}
+            ,star=#{star}
+            ,sc=#{sc}
+            ,vd=#{vd}
+            ,dir=#{dir}
+            ,statue=#{statue}
+            ,insertTime=#{inserttime}
+            ,maoyanjson=#{maoyanjson}
+        where id=#{id}
+    </update>
+
+    <update id="updateNonEmptyHotMovieById" parameterType="com.sysu.pojo.HotMovie">
+        update hot_movie
+        <set>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="img != null">
+                img=#{img},
+            </if>
+            <if test="cat != null">
+                cat=#{cat},
+            </if>
+            <if test="star != null">
+                star=#{star},
+            </if>
+            <if test="sc != null">
+                sc=#{sc},
+            </if>
+            <if test="vd != null">
+                vd=#{vd},
+            </if>
+            <if test="dir != null">
+                dir=#{dir},
+            </if>
+            <if test="statue != null">
+                statue=#{statue},
+            </if>
+            <if test="inserttime != null">
+                insertTime=#{inserttime},
+            </if>
+            <if test="maoyanjson != null">
+                maoyanjson=#{maoyanjson},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateHotMovie" parameterType="map">
+        update hot_movie
+        <set>
+                id=#{enti.id},
+                name=#{enti.name},
+                img=#{enti.img},
+                cat=#{enti.cat},
+                star=#{enti.star},
+                sc=#{enti.sc},
+                vd=#{enti.vd},
+                dir=#{enti.dir},
+                statue=#{enti.statue},
+                insertTime=#{enti.inserttime},
+                maoyanjson=#{enti.maoyanjson},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyHotMovie" parameterType="map">
+        update hot_movie
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.name != null">
+                name=#{enti.name},
+            </if>
+            <if test="enti.img != null">
+                img=#{enti.img},
+            </if>
+            <if test="enti.cat != null">
+                cat=#{enti.cat},
+            </if>
+            <if test="enti.star != null">
+                star=#{enti.star},
+            </if>
+            <if test="enti.sc != null">
+                sc=#{enti.sc},
+            </if>
+            <if test="enti.vd != null">
+                vd=#{enti.vd},
+            </if>
+            <if test="enti.dir != null">
+                dir=#{enti.dir},
+            </if>
+            <if test="enti.statue != null">
+                statue=#{enti.statue},
+            </if>
+            <if test="enti.inserttime != null">
+                insertTime=#{enti.inserttime},
+            </if>
+            <if test="enti.maoyanjson != null">
+                maoyanjson=#{enti.maoyanjson},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

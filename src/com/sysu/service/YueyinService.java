@@ -3,6 +3,9 @@ import java.util.List;
 import com.sysu.pojo.Yueyin;
 import com.sysu.common.Assist;
 public interface YueyinService{
+    public List<Yueyin> getYueyinByUserName(String username);
+    public List<Yueyin> getAllYueyin();
+    
     long getYueyinRowCount(Assist assist);
     List<Yueyin> selectYueyin(Assist assist);
     Yueyin selectYueyinById(Integer id);

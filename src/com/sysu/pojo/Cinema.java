@@ -1,29 +1,21 @@
 package com.sysu.pojo;
-
-import java.io.Serializable;
-
-public class Cinema implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private Integer id;
-    private Integer cityId;
-    private String cityName;
+public class Cinema {
+    private Integer id;
+    private String city;
+    private String area;
     private String addr;
     private String name;
-    private Double lat;
-    private Double lng;
     private String maoyanjson;
     public Cinema() {
         super();
     }
-    public Cinema(Integer id,Integer cityId,String cityName,String addr,String name,Double lat,Double lng,String maoyanjson) {
+    public Cinema(Integer id,String city,String area,String addr,String name,String maoyanjson) {
         super();
         this.id = id;
-        this.cityId = cityId;
-        this.cityName = cityName;
+        this.city = city;
+        this.area = area;
         this.addr = addr;
         this.name = name;
-        this.lat = lat;
-        this.lng = lng;
         this.maoyanjson = maoyanjson;
     }
     public Integer getId() {
@@ -34,20 +26,20 @@ public class Cinema implements Serializable {
         this.id = id;
     }
 
-    public Integer getCityId() {
-        return this.cityId;
+    public String getCity() {
+        return this.city;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getCityName() {
-        return this.cityName;
+    public String getArea() {
+        return this.area;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void setArea(String area) {
+        this.area = area;
     }
 
     public String getAddr() {
@@ -64,22 +56,6 @@ public class Cinema implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Double getLat() {
-        return this.lat;
-    }
-
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
-
-    public Double getLng() {
-        return this.lng;
-    }
-
-    public void setLng(Double lng) {
-        this.lng = lng;
     }
 
     public String getMaoyanjson() {

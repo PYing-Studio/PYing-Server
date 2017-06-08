@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sysu.mapper.MoviesMapper">
+    <resultMap id="result_Movies_Map" type="com.sysu.pojo.Movies">
+        <id column="Movies0" property="id" />
+        <result column="Movies1" property="name" />
+        <result column="Movies2" property="img" />
+        <result column="Movies3" property="cat" />
+        <result column="Movies4" property="star" />
+        <result column="Movies5" property="sc" />
+        <result column="Movies6" property="vd" />
+        <result column="Movies7" property="dir" />
+        <result column="Movies8" property="dra" />
+        <result column="Movies9" property="maoyanjson" />
+    </resultMap>
+
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value}
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="movies_Column">
+        movies.id as Movies0
+        ,movies.name as Movies1
+        ,movies.img as Movies2
+        ,movies.cat as Movies3
+        ,movies.star as Movies4
+        ,movies.sc as Movies5
+        ,movies.vd as Movies6
+        ,movies.dir as Movies7
+        ,movies.dra as Movies8
+        ,movies.maoyanjson as Movies9
+    </sql>
+
+    <select id="getMoviesRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
+        select count(id) from movies
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <select id="selectMovies" parameterType="com.sysu.common.Assist"  resultMap="result_Movies_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="movies_Column" /> 
+            </otherwise>
+        </choose>
+        from movies
+        <if test="require!=null"><include refid="Assist" /></if>
+        <if test="order !=null">${order}</if>
+        <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
+    </select> 
+
+    <select id="selectMoviesById" parameterType="java.lang.Integer" resultMap="result_Movies_Map">
+        select 
+            <include refid="movies_Column" /> 
+        from movies
+        where movies.id = #{id}
+    </select> 
+
+
+    <insert id="insertMovies" parameterType="com.sysu.pojo.Movies">
+        insert into movies(id,name,img,cat,star,sc,vd,dir,dra,maoyanjson) 
+        values(#{id},#{name},#{img},#{cat},#{star},#{sc},#{vd},#{dir},#{dra},#{maoyanjson})
+    </insert>
+
+    <insert id="insertNonEmptyMovies" parameterType="com.sysu.pojo.Movies">
+        insert into movies
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="img != null">img,</if>
+            <if test="cat != null">cat,</if>
+            <if test="star != null">star,</if>
+            <if test="sc != null">sc,</if>
+            <if test="vd != null">vd,</if>
+            <if test="dir != null">dir,</if>
+            <if test="dra != null">dra,</if>
+            <if test="maoyanjson != null">maoyanjson,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="name != null"> #{name},</if>
+            <if test="img != null"> #{img},</if>
+            <if test="cat != null"> #{cat},</if>
+            <if test="star != null"> #{star},</if>
+            <if test="sc != null"> #{sc},</if>
+            <if test="vd != null"> #{vd},</if>
+            <if test="dir != null"> #{dir},</if>
+            <if test="dra != null"> #{dra},</if>
+            <if test="maoyanjson != null"> #{maoyanjson},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteMoviesById" parameterType="java.lang.Integer">
+        delete from movies
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteMovies" parameterType="com.sysu.common.Assist">
+        delete from movies
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <update id="updateMoviesById" parameterType="com.sysu.pojo.Movies">
+        update movies set
+            name=#{name}
+            ,img=#{img}
+            ,cat=#{cat}
+            ,star=#{star}
+            ,sc=#{sc}
+            ,vd=#{vd}
+            ,dir=#{dir}
+            ,dra=#{dra}
+            ,maoyanjson=#{maoyanjson}
+        where id=#{id}
+    </update>
+
+    <update id="updateNonEmptyMoviesById" parameterType="com.sysu.pojo.Movies">
+        update movies
+        <set>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="img != null">
+                img=#{img},
+            </if>
+            <if test="cat != null">
+                cat=#{cat},
+            </if>
+            <if test="star != null">
+                star=#{star},
+            </if>
+            <if test="sc != null">
+                sc=#{sc},
+            </if>
+            <if test="vd != null">
+                vd=#{vd},
+            </if>
+            <if test="dir != null">
+                dir=#{dir},
+            </if>
+            <if test="dra != null">
+                dra=#{dra},
+            </if>
+            <if test="maoyanjson != null">
+                maoyanjson=#{maoyanjson},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateMovies" parameterType="map">
+        update movies
+        <set>
+                id=#{enti.id},
+                name=#{enti.name},
+                img=#{enti.img},
+                cat=#{enti.cat},
+                star=#{enti.star},
+                sc=#{enti.sc},
+                vd=#{enti.vd},
+                dir=#{enti.dir},
+                dra=#{enti.dra},
+                maoyanjson=#{enti.maoyanjson},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <update id="updateNonEmptyMovies" parameterType="map">
+        update movies
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.name != null">
+                name=#{enti.name},
+            </if>
+            <if test="enti.img != null">
+                img=#{enti.img},
+            </if>
+            <if test="enti.cat != null">
+                cat=#{enti.cat},
+            </if>
+            <if test="enti.star != null">
+                star=#{enti.star},
+            </if>
+            <if test="enti.sc != null">
+                sc=#{enti.sc},
+            </if>
+            <if test="enti.vd != null">
+                vd=#{enti.vd},
+            </if>
+            <if test="enti.dir != null">
+                dir=#{enti.dir},
+            </if>
+            <if test="enti.dra != null">
+                dra=#{enti.dra},
+            </if>
+            <if test="enti.maoyanjson != null">
+                maoyanjson=#{enti.maoyanjson},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

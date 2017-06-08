@@ -6,4 +6,6 @@ public interface UserService{
 	public User login(String userName, String password);
 	public int isExist(String userName);
 	public int insertUser(User value);
+	public User getUser(String username);
+	public int updateUser(User user);
 }

@@ -1,9 +1,12 @@
 package com.sysu.pojo;
-public class Order {
+public class MovieOrder {
     private Integer id;
+    private Integer status;
+    private Integer hasYueyin;
     private String username;
+    private Integer showTimeId;
     private Integer movieId;
-    private String moveName;
+    private String movieName;
     private Integer cinemaId;
     private String cinemaName;
     private java.util.Date showTime;
@@ -11,16 +14,18 @@ public class Order {
     private java.util.Date makeTime;
     private Integer num;
     private String seat;
-    private Integer statue;
-    public Order() {
+    public MovieOrder() {
         super();
     }
-    public Order(Integer id,String username,Integer movieId,String moveName,Integer cinemaId,String cinemaName,java.util.Date showTime,java.util.Date payTime,java.util.Date makeTime,Integer num,String seat,Integer statue) {
+    public MovieOrder(Integer id,Integer status,Integer hasYueyin,String username,Integer showTimeId,Integer movieId,String movieName,Integer cinemaId,String cinemaName,java.util.Date showTime,java.util.Date payTime,java.util.Date makeTime,Integer num,String seat) {
         super();
         this.id = id;
+        this.status = status;
+        this.hasYueyin = hasYueyin;
         this.username = username;
+        this.showTimeId = showTimeId;
         this.movieId = movieId;
-        this.moveName = moveName;
+        this.movieName = movieName;
         this.cinemaId = cinemaId;
         this.cinemaName = cinemaName;
         this.showTime = showTime;
@@ -28,7 +33,6 @@ public class Order {
         this.makeTime = makeTime;
         this.num = num;
         this.seat = seat;
-        this.statue = statue;
     }
     public Integer getId() {
         return this.id;
@@ -36,6 +40,22 @@ public class Order {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getHasYueyin() {
+        return this.hasYueyin;
+    }
+
+    public void setHasYueyin(Integer hasYueyin) {
+        this.hasYueyin = hasYueyin;
     }
 
     public String getUsername() {
@@ -46,6 +66,14 @@ public class Order {
         this.username = username;
     }
 
+    public Integer getShowTimeId() {
+        return this.showTimeId;
+    }
+
+    public void setShowTimeId(Integer showTimeId) {
+        this.showTimeId = showTimeId;
+    }
+
     public Integer getMovieId() {
         return this.movieId;
     }
@@ -54,12 +82,12 @@ public class Order {
         this.movieId = movieId;
     }
 
-    public String getMoveName() {
-        return this.moveName;
+    public String getMovieName() {
+        return this.movieName;
     }
 
-    public void setMoveName(String moveName) {
-        this.moveName = moveName;
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
     }
 
     public Integer getCinemaId() {
@@ -116,14 +144,6 @@ public class Order {
 
     public void setSeat(String seat) {
         this.seat = seat;
-    }
-
-    public Integer getStatue() {
-        return this.statue;
-    }
-
-    public void setStatue(Integer statue) {
-        this.statue = statue;
     }
 
 }

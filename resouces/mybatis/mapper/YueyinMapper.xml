@@ -4,14 +4,16 @@
     <resultMap id="result_Yueyin_Map" type="com.sysu.pojo.Yueyin">
         <id column="Yueyin0" property="id" />
         <result column="Yueyin1" property="username" />
-        <result column="Yueyin2" property="movieId" />
-        <result column="Yueyin3" property="moveName" />
-        <result column="Yueyin4" property="cinemaId" />
-        <result column="Yueyin5" property="cinemaName" />
-        <result column="Yueyin6" property="time" />
-        <result column="Yueyin7" property="num" />
-        <result column="Yueyin8" property="friends" />
-        <result column="Yueyin9" property="statue" />
+        <result column="Yueyin2" property="orderId" />
+        <result column="Yueyin3" property="num" />
+        <result column="Yueyin4" property="leaveNum" />
+        <result column="Yueyin5" property="friends" />
+        <result column="Yueyin6" property="status" />
+        <result column="Yueyin7" property="movieId" />
+        <result column="Yueyin8" property="movieName" />
+        <result column="Yueyin9" property="cinemaId" />
+        <result column="Yueyin10" property="cinemaName" />
+        <result column="Yueyin11" property="showTime" />
     </resultMap>
 
     <sql id="Assist">
@@ -33,14 +35,16 @@
     <sql id="yueyin_Column">
         yueyin.id as Yueyin0
         ,yueyin.username as Yueyin1
-        ,yueyin.movie_id as Yueyin2
-        ,yueyin.move_name as Yueyin3
-        ,yueyin.cinema_id as Yueyin4
-        ,yueyin.cinema_name as Yueyin5
-        ,yueyin.time as Yueyin6
-        ,yueyin.num as Yueyin7
-        ,yueyin.friends as Yueyin8
-        ,yueyin.statue as Yueyin9
+        ,yueyin.order_id as Yueyin2
+        ,yueyin.num as Yueyin3
+        ,yueyin.leave_num as Yueyin4
+        ,yueyin.friends as Yueyin5
+        ,yueyin.status as Yueyin6
+        ,yueyin.movie_id as Yueyin7
+        ,yueyin.movie_name as Yueyin8
+        ,yueyin.cinema_id as Yueyin9
+        ,yueyin.cinema_name as Yueyin10
+        ,yueyin.show_time as Yueyin11
     </sql>
 
     <select id="getYueyinRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
@@ -70,8 +74,8 @@
 
 
     <insert id="insertYueyin" parameterType="com.sysu.pojo.Yueyin">
-        insert into yueyin(id,username,movie_id,move_name,cinema_id,cinema_name,time,num,friends,statue) 
-        values(#{id},#{username},#{movieId},#{moveName},#{cinemaId},#{cinemaName},#{time},#{num},#{friends},#{statue})
+        insert into yueyin(id,username,order_id,num,leave_num,friends,status,movie_id,movie_name,cinema_id,cinema_name,show_time) 
+        values(#{id},#{username},#{orderId},#{num},#{leaveNum},#{friends},#{status},#{movieId},#{movieName},#{cinemaId},#{cinemaName},#{showTime})
     </insert>
 
     <insert id="insertNonEmptyYueyin" parameterType="com.sysu.pojo.Yueyin">
@@ -79,26 +83,30 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
             <if test="username != null">username,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="num != null">num,</if>
+            <if test="leaveNum != null">leave_num,</if>
+            <if test="friends != null">friends,</if>
+            <if test="status != null">status,</if>
             <if test="movieId != null">movie_id,</if>
-            <if test="moveName != null">move_name,</if>
+            <if test="movieName != null">movie_name,</if>
             <if test="cinemaId != null">cinema_id,</if>
             <if test="cinemaName != null">cinema_name,</if>
-            <if test="time != null">time,</if>
-            <if test="num != null">num,</if>
-            <if test="friends != null">friends,</if>
-            <if test="statue != null">statue,</if>
+            <if test="showTime != null">show_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null"> #{id},</if>
             <if test="username != null"> #{username},</if>
+            <if test="orderId != null"> #{orderId},</if>
+            <if test="num != null"> #{num},</if>
+            <if test="leaveNum != null"> #{leaveNum},</if>
+            <if test="friends != null"> #{friends},</if>
+            <if test="status != null"> #{status},</if>
             <if test="movieId != null"> #{movieId},</if>
-            <if test="moveName != null"> #{moveName},</if>
+            <if test="movieName != null"> #{movieName},</if>
             <if test="cinemaId != null"> #{cinemaId},</if>
             <if test="cinemaName != null"> #{cinemaName},</if>
-            <if test="time != null"> #{time},</if>
-            <if test="num != null"> #{num},</if>
-            <if test="friends != null"> #{friends},</if>
-            <if test="statue != null"> #{statue},</if>
+            <if test="showTime != null"> #{showTime},</if>
         </trim>
     </insert>
 
@@ -115,14 +123,16 @@
     <update id="updateYueyinById" parameterType="com.sysu.pojo.Yueyin">
         update yueyin set
             username=#{username}
+            ,order_id=#{orderId}
+            ,num=#{num}
+            ,leave_num=#{leaveNum}
+            ,friends=#{friends}
+            ,status=#{status}
             ,movie_id=#{movieId}
-            ,move_name=#{moveName}
+            ,movie_name=#{movieName}
             ,cinema_id=#{cinemaId}
             ,cinema_name=#{cinemaName}
-            ,time=#{time}
-            ,num=#{num}
-            ,friends=#{friends}
-            ,statue=#{statue}
+            ,show_time=#{showTime}
         where id=#{id}
     </update>
 
@@ -132,11 +142,26 @@
             <if test="username != null">
                 username=#{username},
             </if>
+            <if test="orderId != null">
+                order_id=#{orderId},
+            </if>
+            <if test="num != null">
+                num=#{num},
+            </if>
+            <if test="leaveNum != null">
+                leave_num=#{leaveNum},
+            </if>
+            <if test="friends != null">
+                friends=#{friends},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
             <if test="movieId != null">
                 movie_id=#{movieId},
             </if>
-            <if test="moveName != null">
-                move_name=#{moveName},
+            <if test="movieName != null">
+                movie_name=#{movieName},
             </if>
             <if test="cinemaId != null">
                 cinema_id=#{cinemaId},
@@ -144,17 +169,8 @@
             <if test="cinemaName != null">
                 cinema_name=#{cinemaName},
             </if>
-            <if test="time != null">
-                time=#{time},
-            </if>
-            <if test="num != null">
-                num=#{num},
-            </if>
-            <if test="friends != null">
-                friends=#{friends},
-            </if>
-            <if test="statue != null">
-                statue=#{statue},
+            <if test="showTime != null">
+                show_time=#{showTime},
             </if>
         </set>
         where id=#{id}
@@ -165,14 +181,16 @@
         <set>
                 id=#{enti.id},
                 username=#{enti.username},
+                order_id=#{enti.orderId},
+                num=#{enti.num},
+                leave_num=#{enti.leaveNum},
+                friends=#{enti.friends},
+                status=#{enti.status},
                 movie_id=#{enti.movieId},
-                move_name=#{enti.moveName},
+                movie_name=#{enti.movieName},
                 cinema_id=#{enti.cinemaId},
                 cinema_name=#{enti.cinemaName},
-                time=#{enti.time},
-                num=#{enti.num},
-                friends=#{enti.friends},
-                statue=#{enti.statue},
+                show_time=#{enti.showTime},
         </set>
         <if test="assist.require!=null"><include refid="updateAssist" /></if>
     </update>
@@ -186,11 +204,26 @@
             <if test="enti.username != null">
                 username=#{enti.username},
             </if>
+            <if test="enti.orderId != null">
+                order_id=#{enti.orderId},
+            </if>
+            <if test="enti.num != null">
+                num=#{enti.num},
+            </if>
+            <if test="enti.leaveNum != null">
+                leave_num=#{enti.leaveNum},
+            </if>
+            <if test="enti.friends != null">
+                friends=#{enti.friends},
+            </if>
+            <if test="enti.status != null">
+                status=#{enti.status},
+            </if>
             <if test="enti.movieId != null">
                 movie_id=#{enti.movieId},
             </if>
-            <if test="enti.moveName != null">
-                move_name=#{enti.moveName},
+            <if test="enti.movieName != null">
+                movie_name=#{enti.movieName},
             </if>
             <if test="enti.cinemaId != null">
                 cinema_id=#{enti.cinemaId},
@@ -198,17 +231,8 @@
             <if test="enti.cinemaName != null">
                 cinema_name=#{enti.cinemaName},
             </if>
-            <if test="enti.time != null">
-                time=#{enti.time},
-            </if>
-            <if test="enti.num != null">
-                num=#{enti.num},
-            </if>
-            <if test="enti.friends != null">
-                friends=#{enti.friends},
-            </if>
-            <if test="enti.statue != null">
-                statue=#{enti.statue},
+            <if test="enti.showTime != null">
+                show_time=#{enti.showTime},
             </if>
         </set>
         <if test="assist.require!=null"><include refid="updateAssist" /></if>

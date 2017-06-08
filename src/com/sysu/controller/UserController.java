@@ -1,5 +1,6 @@
 package com.sysu.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,17 +11,22 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.sysu.utils.BeansUtils;
 import com.sysu.utils.Md5Encrypt;
 import com.sysu.pojo.User;
 import com.sysu.service.UserService;
 import com.sysu.utils.ConstantUtils;
 
 @Controller
+@RequestMapping(value = "/user")
 public class UserController {
 	private static Logger logger = Logger.getLogger(UserController.class);
 	private static final String key = "pyin";
@@ -28,7 +34,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	// http://localhost:8080/PYin_Server/user/login?password=string&username=string
+	// http://localhost:8080/api/user/login?password=string&username=string
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, String> login(
@@ -94,18 +100,18 @@ public class UserController {
 			map.put("status", "0");
 			map.put("msg", "用户名不能为空，或者格式错误");
 		}
-		if ("".equals(user.getPhone())) {
-			map.put("status", "0");
-			map.put("msg", "手机不能为空，或者格式错误");
-		}
+		// if ("".equals(user.getPhone())) {
+		// map.put("status", "0");
+		// map.put("msg", "手机不能为空，或者格式错误");
+		// }
 		if ("".equals(user.getNickname())) {
 			user.setNickname("泡影用户");
 		}
 		return map;
 	}
 
-	// http://localhost:8080/PYin_Server/user/register?email=string&nickname=string&password=string&phone=string&username=string
-	@RequestMapping(value = "register")
+	// http://localhost:8080/api/user/register?email=string&nickname=string&password=string&phone=string&username=string
+	@RequestMapping(value = "register", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, String> register(
 			@RequestParam(value = "username", required = true, defaultValue = "") String username,
@@ -131,7 +137,7 @@ public class UserController {
 				map.put("msg", user.getUsername() + "已经存在，请修改账户！");
 				return map;
 			}
-			user.setPassword(Md5Encrypt.md5(password + key));
+			user.setPassword(Md5Encrypt.md5(user.getPassword() + key));
 			int ret = userService.insertUser(user);
 			if (ret > 0) {
 				map.put("status", "1");
@@ -145,6 +151,124 @@ public class UserController {
 			logger.error("toAddManager异常", e);
 			map.put("status", "0");
 			map.put("msg", "注册异常");
+			return map;
+		}
+	}
+
+	@RequestMapping(value = { "", "/" }, method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> getUser(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			HttpSession session = request.getSession();
+			User userinfo = (User) session
+					.getAttribute(ConstantUtils.USER_INFO);
+			User user = userService.getUser(userinfo.getUsername());
+			Map<String, Object> beanMap = BeansUtils.transBean2Map(user);
+			beanMap.remove("id");
+			beanMap.remove("password");
+			map.put("status", "1");
+			map.put("data", beanMap);
+			map.put("msg", "");
+			return map;
+		} catch (Exception e) {
+			logger.error("退出登录异常" + e);
+			map.put("status", "0");
+			map.put("msg", "退出登录异常");
+			return map;
+		}
+	}
+
+	@RequestMapping(value = "/image", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, String> setImage(
+			HttpServletRequest request,
+			@RequestParam(required = true, value = "image") MultipartFile imageFile) {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			HttpSession session = request.getSession();
+			User userinfo = (User) session
+					.getAttribute(ConstantUtils.USER_INFO);
+			User user = userService.getUser(userinfo.getUsername());
+			String imgUrl = "";
+			if (!imageFile.isEmpty()) {
+				String OriginalFilename = imageFile.getOriginalFilename();
+				String extensionName = OriginalFilename.indexOf(".") != -1 ? OriginalFilename
+						.substring(OriginalFilename.lastIndexOf(".") + 1,
+								OriginalFilename.length()) : null;
+				// String extensionName = OriginalFilename
+				// .substring(OriginalFilename.lastIndexOf("."));
+				if (extensionName != null) {// 判断文件类型是否为空
+					if ("GIF".equals(extensionName.toUpperCase())
+							|| "PNG".equals(extensionName.toUpperCase())
+							|| "JPG".equals(extensionName.toUpperCase())) {
+						String logImageName = user.getUsername() + "." + extensionName;
+						String realPath=request.getSession().getServletContext().getRealPath(File.separator);
+						String preimagePath = File.separator + "userImage" + File.separator + logImageName;
+						FileCopyUtils.copy(imageFile.getBytes(), new File(
+								realPath + preimagePath));
+						imgUrl = request.getScheme() + "://"
+								+ ConstantUtils.SERVER_IP + ":" + request.getServerPort() + request.getContextPath() + "/userImage/" + logImageName;
+					} else {
+						map.put("status", "0");
+						map.put("msg", "不是我们想要的文件类型,请按要求重新上传");
+						map.put("data", "");
+						return map;
+					}
+				} else {
+					map.put("status", "0");
+					map.put("msg", "文件类型为空,请按要求重新上传");
+					map.put("data", "");
+					return map;
+				}
+			} else {
+				map.put("status", "0");
+				map.put("data", "");
+				map.put("msg", "没有找到相对应的文件");
+				return map;
+			}
+			map.put("status", "1");
+			map.put("data", imgUrl);
+			map.put("msg", "");
+			return map;
+		} catch (Exception e) {
+			logger.error("上传图片异常" + e);
+			map.put("status", "0");
+			map.put("msg", "上传图片异常");
+			map.put("data", "");
+			return map;
+		}
+	}
+
+	@RequestMapping(value = { "", "/" }, method = RequestMethod.PUT)
+	@ResponseBody
+	public Map<String, String> updateUser(HttpServletRequest request,
+			@RequestBody User user) {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			HttpSession session = request.getSession();
+			User userinfo = (User) session
+					.getAttribute(ConstantUtils.USER_INFO);
+			user.setId(userinfo.getId());
+			user.setUsername(userinfo.getUsername());
+			user.setPassword(user.getPassword());
+			map = checkUserForm(user);
+			if ("0".equals(map.get("status"))) {
+				return map;
+			}
+			int res = userService.updateUser(user);
+			if (res > 0) {
+				map.put("status", "1");
+				map.put("msg", "");
+			} else {
+				map.put("status", "0");
+				map.put("msg", "用户信息更新失败");
+			}
+			return map;
+		} catch (Exception e) {
+			logger.error("更新用户信息异常" + e);
+			map.put("status", "0");
+			map.put("msg", "更新用户信息异常");
 			return map;
 		}
 	}

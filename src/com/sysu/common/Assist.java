@@ -8,6 +8,8 @@ import java.util.List;
  * @author Mirren
  */
 public class Assist {
+	// 聚合
+	private String group;
 	// 去重
 	private String distinct;
 	// 自定义排序
@@ -211,6 +213,14 @@ public class Assist {
 	 */
 	public static whereRequire or_like(String column, String req) {
 		return new Assist().new whereRequire("or " + column + " like ", req);
+	}
+	
+	public void setGroup(String column) {
+		this.order = "group By " + column;
+	}
+	
+	public String getGroup() {
+		return this.group;
 	}
 
 	/**

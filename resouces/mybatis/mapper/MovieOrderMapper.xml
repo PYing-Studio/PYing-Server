@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sysu.mapper.OrderMapper">
-    <resultMap id="result_Order_Map" type="com.sysu.pojo.Order">
-        <id column="Order0" property="id" />
-        <result column="Order1" property="username" />
-        <result column="Order2" property="movieId" />
-        <result column="Order3" property="moveName" />
-        <result column="Order4" property="cinemaId" />
-        <result column="Order5" property="cinemaName" />
-        <result column="Order6" property="showTime" />
-        <result column="Order7" property="payTime" />
-        <result column="Order8" property="makeTime" />
-        <result column="Order9" property="num" />
-        <result column="Order10" property="seat" />
-        <result column="Order11" property="statue" />
+<mapper namespace="com.sysu.mapper.MovieOrderMapper">
+    <resultMap id="result_MovieOrder_Map" type="com.sysu.pojo.MovieOrder">
+        <id column="MovieOrder0" property="id" />
+        <result column="MovieOrder1" property="status" />
+        <result column="MovieOrder2" property="hasYueyin" />
+        <result column="MovieOrder3" property="username" />
+        <result column="MovieOrder4" property="showTimeId" />
+        <result column="MovieOrder5" property="movieId" />
+        <result column="MovieOrder6" property="movieName" />
+        <result column="MovieOrder7" property="cinemaId" />
+        <result column="MovieOrder8" property="cinemaName" />
+        <result column="MovieOrder9" property="showTime" />
+        <result column="MovieOrder10" property="payTime" />
+        <result column="MovieOrder11" property="makeTime" />
+        <result column="MovieOrder12" property="num" />
+        <result column="MovieOrder13" property="seat" />
     </resultMap>
 
     <sql id="Assist">
@@ -32,59 +34,64 @@
         </where>
     </sql>
 
-    <sql id="order_Column">
-        order.id as Order0
-        ,order.username as Order1
-        ,order.movie_id as Order2
-        ,order.move_name as Order3
-        ,order.cinema_id as Order4
-        ,order.cinema_name as Order5
-        ,order.show_time as Order6
-        ,order.pay_time as Order7
-        ,order.make_time as Order8
-        ,order.num as Order9
-        ,order.seat as Order10
-        ,order.statue as Order11
+    <sql id="movie_order_Column">
+        movie_order.id as MovieOrder0
+        ,movie_order.status as MovieOrder1
+        ,movie_order.has_yueyin as MovieOrder2
+        ,movie_order.username as MovieOrder3
+        ,movie_order.show_time_id as MovieOrder4
+        ,movie_order.movie_id as MovieOrder5
+        ,movie_order.movie_name as MovieOrder6
+        ,movie_order.cinema_id as MovieOrder7
+        ,movie_order.cinema_name as MovieOrder8
+        ,movie_order.show_time as MovieOrder9
+        ,movie_order.pay_time as MovieOrder10
+        ,movie_order.make_time as MovieOrder11
+        ,movie_order.num as MovieOrder12
+        ,movie_order.seat as MovieOrder13
     </sql>
 
-    <select id="getOrderRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
-        select count(id) from order
+    <select id="getMovieOrderRowCount" parameterType="com.sysu.common.Assist" resultType="java.lang.Long">
+        select count(id) from movie_order
         <if test="require!=null"><include refid="Assist" /></if>
     </select>
-    <select id="selectOrder" parameterType="com.sysu.common.Assist"  resultMap="result_Order_Map">
+    <select id="selectMovieOrder" parameterType="com.sysu.common.Assist"  resultMap="result_MovieOrder_Map">
         select  <if test="distinct !=null">${distinct}</if>
         <choose>
             <when test="resultColumn!=null">${resultColumn}</when>
             <otherwise>
-        <include refid="order_Column" /> 
+        <include refid="movie_order_Column" /> 
             </otherwise>
         </choose>
-        from order
+        from movie_order
         <if test="require!=null"><include refid="Assist" /></if>
         <if test="order !=null">${order}</if>
         <if test="rowSize !=null"> LIMIT #{rowSize} <if test="startRow !=null"> OFFSET #{startRow}</if></if>
     </select> 
 
-    <select id="selectOrderById" parameterType="java.lang.Integer" resultMap="result_Order_Map">
+    <select id="selectMovieOrderById" parameterType="java.lang.Integer" resultMap="result_MovieOrder_Map">
         select 
-            <include refid="order_Column" /> 
-        from order
-        where order.id = #{id}
+            <include refid="movie_order_Column" /> 
+        from movie_order
+        where movie_order.id = #{id}
     </select> 
 
 
-    <insert id="insertOrder" parameterType="com.sysu.pojo.Order">
-        insert into order(id,username,movie_id,move_name,cinema_id,cinema_name,show_time,pay_time,make_time,num,seat,statue) 
-        values(#{id},#{username},#{movieId},#{moveName},#{cinemaId},#{cinemaName},#{showTime},#{payTime},#{makeTime},#{num},#{seat},#{statue})
+    <insert id="insertMovieOrder" parameterType="com.sysu.pojo.MovieOrder">
+        insert into movie_order(id,status,has_yueyin,username,show_time_id,movie_id,movie_name,cinema_id,cinema_name,show_time,pay_time,make_time,num,seat) 
+        values(#{id},#{status},#{hasYueyin},#{username},#{showTimeId},#{movieId},#{movieName},#{cinemaId},#{cinemaName},#{showTime},#{payTime},#{makeTime},#{num},#{seat})
     </insert>
 
-    <insert id="insertNonEmptyOrder" parameterType="com.sysu.pojo.Order">
-        insert into order
+    <insert id="insertNonEmptyMovieOrder" parameterType="com.sysu.pojo.MovieOrder">
+        insert into movie_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
+            <if test="status != null">status,</if>
+            <if test="hasYueyin != null">has_yueyin,</if>
             <if test="username != null">username,</if>
+            <if test="showTimeId != null">show_time_id,</if>
             <if test="movieId != null">movie_id,</if>
-            <if test="moveName != null">move_name,</if>
+            <if test="movieName != null">movie_name,</if>
             <if test="cinemaId != null">cinema_id,</if>
             <if test="cinemaName != null">cinema_name,</if>
             <if test="showTime != null">show_time,</if>
@@ -92,13 +99,15 @@
             <if test="makeTime != null">make_time,</if>
             <if test="num != null">num,</if>
             <if test="seat != null">seat,</if>
-            <if test="statue != null">statue,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null"> #{id},</if>
+            <if test="status != null"> #{status},</if>
+            <if test="hasYueyin != null"> #{hasYueyin},</if>
             <if test="username != null"> #{username},</if>
+            <if test="showTimeId != null"> #{showTimeId},</if>
             <if test="movieId != null"> #{movieId},</if>
-            <if test="moveName != null"> #{moveName},</if>
+            <if test="movieName != null"> #{movieName},</if>
             <if test="cinemaId != null"> #{cinemaId},</if>
             <if test="cinemaName != null"> #{cinemaName},</if>
             <if test="showTime != null"> #{showTime},</if>
@@ -106,25 +115,27 @@
             <if test="makeTime != null"> #{makeTime},</if>
             <if test="num != null"> #{num},</if>
             <if test="seat != null"> #{seat},</if>
-            <if test="statue != null"> #{statue},</if>
         </trim>
     </insert>
 
-    <delete id="deleteOrderById" parameterType="java.lang.Integer">
-        delete from order
+    <delete id="deleteMovieOrderById" parameterType="java.lang.Integer">
+        delete from movie_order
         where id = #{id}
     </delete>
 
-    <delete id="deleteOrder" parameterType="com.sysu.common.Assist">
-        delete from order
+    <delete id="deleteMovieOrder" parameterType="com.sysu.common.Assist">
+        delete from movie_order
         <if test="require!=null"><include refid="Assist" /></if>
     </delete>
 
-    <update id="updateOrderById" parameterType="com.sysu.pojo.Order">
-        update order set
-            username=#{username}
+    <update id="updateMovieOrderById" parameterType="com.sysu.pojo.MovieOrder">
+        update movie_order set
+            status=#{status}
+            ,has_yueyin=#{hasYueyin}
+            ,username=#{username}
+            ,show_time_id=#{showTimeId}
             ,movie_id=#{movieId}
-            ,move_name=#{moveName}
+            ,movie_name=#{movieName}
             ,cinema_id=#{cinemaId}
             ,cinema_name=#{cinemaName}
             ,show_time=#{showTime}
@@ -132,21 +143,29 @@
             ,make_time=#{makeTime}
             ,num=#{num}
             ,seat=#{seat}
-            ,statue=#{statue}
         where id=#{id}
     </update>
 
-    <update id="updateNonEmptyOrderById" parameterType="com.sysu.pojo.Order">
-        update order
+    <update id="updateNonEmptyMovieOrderById" parameterType="com.sysu.pojo.MovieOrder">
+        update movie_order
         <set>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="hasYueyin != null">
+                has_yueyin=#{hasYueyin},
+            </if>
             <if test="username != null">
                 username=#{username},
+            </if>
+            <if test="showTimeId != null">
+                show_time_id=#{showTimeId},
             </if>
             <if test="movieId != null">
                 movie_id=#{movieId},
             </if>
-            <if test="moveName != null">
-                move_name=#{moveName},
+            <if test="movieName != null">
+                movie_name=#{movieName},
             </if>
             <if test="cinemaId != null">
                 cinema_id=#{cinemaId},
@@ -169,20 +188,20 @@
             <if test="seat != null">
                 seat=#{seat},
             </if>
-            <if test="statue != null">
-                statue=#{statue},
-            </if>
         </set>
         where id=#{id}
     </update>
 
-    <update id="updateOrder" parameterType="map">
-        update order
+    <update id="updateMovieOrder" parameterType="map">
+        update movie_order
         <set>
                 id=#{enti.id},
+                status=#{enti.status},
+                has_yueyin=#{enti.hasYueyin},
                 username=#{enti.username},
+                show_time_id=#{enti.showTimeId},
                 movie_id=#{enti.movieId},
-                move_name=#{enti.moveName},
+                movie_name=#{enti.movieName},
                 cinema_id=#{enti.cinemaId},
                 cinema_name=#{enti.cinemaName},
                 show_time=#{enti.showTime},
@@ -190,25 +209,33 @@
                 make_time=#{enti.makeTime},
                 num=#{enti.num},
                 seat=#{enti.seat},
-                statue=#{enti.statue},
         </set>
         <if test="assist.require!=null"><include refid="updateAssist" /></if>
     </update>
 
-    <update id="updateNonEmptyOrder" parameterType="map">
-        update order
+    <update id="updateNonEmptyMovieOrder" parameterType="map">
+        update movie_order
         <set>
             <if test="enti.id != null">
                 id=#{enti.id},
             </if>
+            <if test="enti.status != null">
+                status=#{enti.status},
+            </if>
+            <if test="enti.hasYueyin != null">
+                has_yueyin=#{enti.hasYueyin},
+            </if>
             <if test="enti.username != null">
                 username=#{enti.username},
+            </if>
+            <if test="enti.showTimeId != null">
+                show_time_id=#{enti.showTimeId},
             </if>
             <if test="enti.movieId != null">
                 movie_id=#{enti.movieId},
             </if>
-            <if test="enti.moveName != null">
-                move_name=#{enti.moveName},
+            <if test="enti.movieName != null">
+                movie_name=#{enti.movieName},
             </if>
             <if test="enti.cinemaId != null">
                 cinema_id=#{enti.cinemaId},
@@ -230,9 +257,6 @@
             </if>
             <if test="enti.seat != null">
                 seat=#{enti.seat},
-            </if>
-            <if test="enti.statue != null">
-                statue=#{enti.statue},
             </if>
         </set>
         <if test="assist.require!=null"><include refid="updateAssist" /></if>

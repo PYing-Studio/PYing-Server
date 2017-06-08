@@ -63,7 +63,7 @@
     </select> 
 
 
-    <insert id="insertUser" parameterType="com.sysu.pojo.User">
+    <insert id="insertUser" parameterType="com.sysu.pojo.User" useGeneratedKeys="true" keyProperty="id">
         insert into user(id,username,password,phone,email,nickname,image) 
         values(#{id},#{username},#{password},#{phone},#{email},#{nickname},#{image})
     </insert>
