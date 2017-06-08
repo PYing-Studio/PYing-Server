@@ -68,6 +68,9 @@ public class YueyinController {
 		String[] friends = yueyin.getFriends().split(separatorString);
 		List<Map<String, Object>> firends = new LinkedList<Map<String, Object>>();
 		for (int i = 0; i < friends.length; i++) {
+			if ("".endsWith(friends[i])) {
+				continue;
+			}
 			Map<String, Object> map = new HashMap<>();
 			map.put("username", friends[i]);
 			map.put("image", userService.getUser(friends[i]).getImage());

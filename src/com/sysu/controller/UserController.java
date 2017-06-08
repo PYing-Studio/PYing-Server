@@ -251,7 +251,7 @@ public class UserController {
 					.getAttribute(ConstantUtils.USER_INFO);
 			user.setId(userinfo.getId());
 			user.setUsername(userinfo.getUsername());
-			user.setPassword(user.getPassword());
+			user.setPassword(userinfo.getPassword());
 			map = checkUserForm(user);
 			if ("0".equals(map.get("status"))) {
 				return map;
