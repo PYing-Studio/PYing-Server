@@ -1,4 +1,5 @@
 package com.sysu.serviceImpl;
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,12 @@ public class IntheaterMovieServiceImpl implements IntheaterMovieService{
 			assist.setRequires(Assist.and_eq("cinema_id", cinema_id.toString()), Assist.and_eq("movie_id", movie_id.toString()));
 		}
 		assist.getRequire().add(Assist.and_gt("leave_num", "0"));
+//		String tmpString = "";
+//		try {
+//			tmpString = DateUtil.formatDate(DateUtil.dataIncrease(DateUtil.getCurrrentDate(), -1));
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
 		assist.getRequire().add(Assist.and_gt("show_time", DateUtil.getCurrrentDateString()));
 		return intheaterMovieMapper.selectIntheaterMovie(assist);
 	}
