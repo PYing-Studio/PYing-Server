@@ -1,2 +1,2 @@
-# PYing-Server
-  - 泡影服务端
+# 泡影服务端
+  - 项目是在Windows 10下的myeclipse 2013开发的，所以为了运行项目，可以通过myeclipse导入项目，然后按照普通的java 
